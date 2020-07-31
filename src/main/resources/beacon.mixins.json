@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.hypercubemc.beacon.mixin",
+  "compatibilityLevel": "JAVA_14",
+  "mixins": [
+  ],
+  "server": [
+    "OPFillCommandSpawnProtectionMixin",
+    "OPSetBlockCommandSpawnProtectionMixin",
+    "OPSpawnProtectionMixin",
+    "PlayerManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

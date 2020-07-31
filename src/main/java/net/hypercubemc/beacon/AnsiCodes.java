@@ -1,0 +1,47 @@
+package net.hypercubemc.beacon;
+
+public class AnsiCodes {
+    public static final String formatReset = "\033[0m";
+    public static final String formatBold = "\033[1m";
+    public static final String formatLight = "\033[2m";
+    public static final String formatItalic = "\033[3m";
+    public static final String formatUnderline = "\033[4m";
+    public static final String formatBlink = "\033[5m";
+    public static final String formatCrazyBlink = "\033[6m";
+    public static final String formatInvertVideo = "\033[7m";
+    public static final String formatHide = "\033[8m";
+    public static final String formatStrike = "\033[9m";
+    public static final String formatDefaultFont = "\033[10m";
+    public static final String formatFirstAltFont = "\033[11m";
+    public static final String formatSecondAltFont = "\033[12m";
+    public static final String formatFraktur = "\033[20m";
+    public static final String formatDoubleUnderline = "\033[21m";
+    public static final String formatDefaultIntensity = "\033[22m";
+    public static final String formatFrakturItalicOff = "\033[23m";
+    public static final String formatUnderlineOff = "\033[24m";
+    public static final String formatBlinkOff = "\033[25m";
+    public static final String formatInvertVideoOff = "\033[27m";
+    public static final String formatReveal = "\033[28m";
+    public static final String formatStrikeOff = "\033[29m";
+    public static final String formatFramed = "\033[51m";
+    public static final String formatCircled = "\033[52m";
+    public static final String formatOverlined = "\033[53m";
+    public static final String formatFramedCircledOff = "\033[54m";
+    public static final String formatOverlinedOff = "\033[55m";
+    public static final String colorBlack = "\033[1;30m";
+    public static final String colorRed = "\033[1;31m";
+    public static final String colorGreen = "\033[1;32m";
+    public static final String colorYellow = "\033[1;33m";
+    public static final String colorBlue = "\033[1;34m";
+    public static final String colorMagenta = "\033[1;35m";
+    public static final String colorCyan = "\033[1;36m";
+    public static final String colorLightGrey = "\033[1;37m";
+    public static final String colorDarkGrey = "\033[1;90m";
+    public static final String colorBrightRed = "\033[1;91m";
+    public static final String colorBrightGreen = "\033[1;92m";
+    public static final String colorBrightYellow = "\033[1;93m";
+    public static final String colorBrightBlue = "\033[1;94m";
+    public static final String colorPink = "\033[1;95m";
+    public static final String colorBrightCyan = "\033[1;96m";
+    public static final String colorWhite = "\033[1;97m";
+}
