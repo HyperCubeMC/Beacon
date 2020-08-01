@@ -1,6 +1,7 @@
 package net.hypercubemc.beacon;
 
 import net.hypercubemc.beacon.BeaconPluginState;
+import net.hypercubemc.beacon.BeaconPluginLogger;
 
 public class BeaconPluginInstance {
     private String pluginName;
@@ -27,5 +28,13 @@ public class BeaconPluginInstance {
 
     void setPluginState(BeaconPluginState pluginState) {
         this.pluginState = pluginState;
+    }
+
+    public Logger getRawLogger() {
+        return LogManager.getLogger(pluginName);
+    }
+
+    public BeaconPluginLogger getLogger() {
+        return new BeaconPluginLogger(pluginName);
     }
 }
