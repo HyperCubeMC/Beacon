@@ -1,6 +1,6 @@
 package net.hypercubemc.beacon;
 
-public interface BeaconPluginInterface {
+public interface BeaconPluginInitializer {
     String pluginName;
     String pluginVersion;
 
