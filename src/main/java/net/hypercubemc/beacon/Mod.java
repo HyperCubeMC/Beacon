@@ -52,7 +52,7 @@ public class Mod implements ModInitializer {
 		});
 	}
 
-    private void setupTriggerCommandAliases() {
+    public void setupTriggerCommandAliases() {
 		Logger log = LogManager.getLogger("beacon");
 		ServerStartCallback.EVENT.register(server -> {
 //			for (String usage : server.getCommandManager().getDispatcher().getAllUsage(server.getCommandManager().getDispatcher().getRoot().getChild("trigger"), server.getCommandSource(), false)) {
