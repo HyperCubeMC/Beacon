@@ -12,6 +12,6 @@ public interface BeaconPluginInitializer {
         return pluginVersion();
     }
 
-    public void onEnable();
-    public void onDisable();
+    public void onEnable(BeaconPluginInstance beaconPluginInstance);
+    public void onDisable(BeaconPluginInstance beaconPluginInstance);
 }
