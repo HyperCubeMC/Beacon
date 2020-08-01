@@ -22,6 +22,7 @@ public class BeaconPluginManager {
             beaconPluginInstance.setPluginState(BeaconPluginState.DISABLING);
             // TODO: Handle errors here too
             beaconPluginInitializer.onDisable(beaconPluginInstance);
+            beaconPluginInstance.setPluginState(BeaconPluginState.DISABLED);
         }
     }
 }
