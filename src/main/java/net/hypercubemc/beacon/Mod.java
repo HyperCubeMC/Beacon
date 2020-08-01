@@ -105,11 +105,18 @@ public class Mod implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-		setupAnsiWindows();
-		registerCommands();
-		setupTriggerCommandAliases();
-		Logger log = LogManager.getLogger("beacon");
+                
+                Logger log = LogManager.getLogger("beacon");
 		String version = FabricLoader.getInstance().getModContainer("beacon").get().getMetadata().getVersion().getFriendlyString();
-		log.info(colorBlue + "[Beacon] Loaded Beacon v" + version + " successfully!" + formatReset);
+
+                try {
+		    setupAnsiWindows();
+		    registerCommands();
+		    setupTriggerCommandAliases();
+                } catch (Exception error) {
+                    log.error(colorRed + "[Beacon] Failed to load Beacon v" + version + ", see the error below for details.");
+                    error.printStackTrace();
+                }
+		log.info(colorBlue + "[Beacon] Loaded Beacon v" + version + "successfully!");
 	}
 }
