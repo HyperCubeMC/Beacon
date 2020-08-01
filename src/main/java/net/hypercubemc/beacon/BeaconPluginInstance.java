@@ -22,6 +22,10 @@ public class BeaconPluginInstance {
     }
 
     public BeaconPluginState getPluginState() {
-        return BeaconPluginState;
+        return pluginState;
+    }
+
+    void setPluginState(BeaconPluginState pluginState) {
+        this.pluginState = pluginState;
     }
 }
