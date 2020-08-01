@@ -2,6 +2,8 @@ package net.hypercubemc.beacon;
 
 import net.hypercubemc.beacon.BeaconPluginState;
 import net.hypercubemc.beacon.BeaconPluginLogger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BeaconPluginInstance {
     private String pluginName;
