@@ -47,7 +47,7 @@ public class Mod implements ModInitializer {
 
 	public void registerCommands() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-			BeaconCommand beaconCommand = new beaconCommand(this);
+			BeaconCommand beaconCommand = new BeaconCommand(this);
 			beaconCommand.register(dispatcher);
 		});
 	}
