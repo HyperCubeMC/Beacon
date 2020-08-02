@@ -1,5 +1,9 @@
-# Created by https://www.toptal.com/developers/gitignore/api/java,windows,macos,linux,intellij,eclipse,netbeans,maven,gradle
-# Edit at https://www.toptal.com/developers/gitignore?templates=java,windows,macos,linux,intellij,eclipse,netbeans,maven,gradle
+# Fabric
+.gradle/
+build/
+out/
+classes/
+.idea/
 
 ### Eclipse ###
 .metadata
@@ -98,14 +102,14 @@ local.properties
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-# .idea/artifacts
-# .idea/compiler.xml
-# .idea/jarRepositories.xml
-# .idea/modules.xml
-# .idea/*.iml
-# .idea/modules
-# *.iml
-# *.ipr
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.iml
+*.ipr
 
 # CMake
 cmake-build-*/
