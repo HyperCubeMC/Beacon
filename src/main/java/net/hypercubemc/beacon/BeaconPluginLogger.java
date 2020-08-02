@@ -7,7 +7,7 @@ import static net.hypercubemc.beacon.AnsiCodes.*;
 public class BeaconPluginLogger {
     private String pluginName;
     
-    public BeaconPluginLogger(pluginName) {
+    public BeaconPluginLogger(String pluginName) {
         this.pluginName = pluginName;
     }
 
