@@ -15,12 +15,13 @@ public class BeaconPluginManager {
         BeaconPluginInstance beaconPluginInstance = new BeaconPluginInstance(pluginName, pluginVersion, BeaconPluginState.ENABLING);
         try {
             beaconPluginInitializer.onEnable(beaconPluginInstance);
+            beaconPluginInstance.setPluginState(BeaconPluginState.ENABLED);
         } catch (Exception error) {
             Logger log = LogManager.getLogger(pluginName);
-            log.error(colorRed + "[" + pluginName + "]" + "An error occured while attempting to enable " + pluginName + " v" + pluginVersion + ", see the error below for details.");
+            log.error(colorRed + "[" + pluginName + "]" + "An error occurred while attempting to enable " + pluginName + " v" + pluginVersion + ", see the error below for details.");
             error.printStackTrace();
             beaconPluginInstance.setPluginState(BeaconPluginState.DISABLING);
-            // TODO: Handle errors here too
+            // TODO: Possibly handle errors here too
             beaconPluginInitializer.onDisable(beaconPluginInstance);
             beaconPluginInstance.setPluginState(BeaconPluginState.DISABLED);
         }

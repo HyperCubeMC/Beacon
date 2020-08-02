@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import static net.hypercubemc.beacon.AnsiCodes.*;
 
 public class BeaconPluginLogger {
-    private String pluginName;
-    
+    private final String pluginName;
+
     public BeaconPluginLogger(String pluginName) {
         this.pluginName = pluginName;
     }

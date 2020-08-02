@@ -6,8 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class BeaconPluginInstance {
-    private String pluginName;
-    private String pluginVersion;
+    private final String pluginName;
+    private final String pluginVersion;
     private BeaconPluginState pluginState;
 
     public BeaconPluginInstance(String pluginName, String pluginVersion, BeaconPluginState pluginState) {
