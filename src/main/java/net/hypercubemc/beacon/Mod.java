@@ -47,43 +47,43 @@ public class Mod implements ModInitializer {
 		});
 	}
 
-        public void setupTriggerCommandAliases() {
-			Logger log = LogManager.getLogger("beacon");
-			ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-				Scoreboard scoreboard = server.getScoreboard();
-				for (ScoreboardObjective objective: scoreboard.getObjectives()) {
-					if (objective.getCriterion().getName().equals("trigger")) {
-						String commandName = objective.getName();
-						server.getCommandManager().getDispatcher().register(literal(commandName)
-								.then(literal("add")
-										.executes(ctx -> {
-											return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " add");
-										})
-										.then(CommandManager.argument("value", IntegerArgumentType.integer())
-												.executes((ctx) -> {
-													int integerArg = IntegerArgumentType.getInteger(ctx, "value");
-													return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " add " + integerArg);
-												})
-										)
-								)
-								.then(literal("set")
-										.executes(ctx -> {
-											return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " set");
-										})
-										.then(CommandManager.argument("value", IntegerArgumentType.integer())
-												.executes((ctx) -> {
-													int integerArg = IntegerArgumentType.getInteger(ctx, "value");
-													return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " set " + integerArg);
-												})
-										)
-								)
-								.executes(ctx -> {
-									return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName);
-								})
-						);
-					}
+	public void setupTriggerCommandAliases() {
+		Logger log = LogManager.getLogger("beacon");
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			Scoreboard scoreboard = server.getScoreboard();
+			for (ScoreboardObjective objective: scoreboard.getObjectives()) {
+				if (objective.getCriterion().getName().equals("trigger")) {
+					String commandName = objective.getName();
+					server.getCommandManager().getDispatcher().register(literal(commandName)
+							.then(literal("add")
+									.executes(ctx -> {
+										return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " add");
+									})
+									.then(CommandManager.argument("value", IntegerArgumentType.integer())
+											.executes((ctx) -> {
+												int integerArg = IntegerArgumentType.getInteger(ctx, "value");
+												return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " add " + integerArg);
+											})
+									)
+							)
+							.then(literal("set")
+									.executes(ctx -> {
+										return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " set");
+									})
+									.then(CommandManager.argument("value", IntegerArgumentType.integer())
+											.executes((ctx) -> {
+												int integerArg = IntegerArgumentType.getInteger(ctx, "value");
+												return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " set " + integerArg);
+											})
+									)
+							)
+							.executes(ctx -> {
+								return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName);
+							})
+					);
 				}
-			});
+			}
+		});
 	}
 
 	@Override
