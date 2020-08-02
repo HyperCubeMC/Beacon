@@ -13,7 +13,6 @@ import net.minecraft.util.Formatting;
 import net.hypercubemc.beacon.Mod;
 
 public class BeaconCommand {
-
     private Mod mod;
 
     public BeaconCommand(Mod mod) {
