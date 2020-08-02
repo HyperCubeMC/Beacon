@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.tree.CommandNode;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.server.ServerStartCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.scoreboard.Scoreboard;
@@ -53,52 +54,43 @@ public class Mod implements ModInitializer {
 	}
 
         public void setupTriggerCommandAliases() {
-		Logger log = LogManager.getLogger("beacon");
-		ServerStartCallback.EVENT.register(server -> {
-//			for (String usage : server.getCommandManager().getDispatcher().getAllUsage(server.getCommandManager().getDispatcher().getRoot().getChild("trigger"), server.getCommandSource(), false)) {
-//				log.info(colorGreen + usage + formatReset);
-//			}
-//			server.getCommandManager().getDispatcher().getSmartUsage(server.getCommandManager().getDispatcher().getRoot().getChild("trigger"), server.getCommandSource()).forEach((k, v) -> {
-//				log.info(colorBlue + k + ": " + v + formatReset);
-//			});
-
-			Scoreboard scoreboard = server.getScoreboard();
-			for (ScoreboardObjective objective: scoreboard.getObjectives()) {
-				if (objective.getCriterion().getName().equals("trigger")) {
-//					log.info("Scoreboard objective: " + objective.getName());
-//					log.info("Scoreboard objective is enabled for snoopy: " + scoreboard.playerHasObjective("Justsnoopy30", objective));
-					String commandName = objective.getName();
-					server.getCommandManager().getDispatcher().register(literal(commandName)
-							.then(literal("add")
-									.executes(ctx -> {
-										return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " add");
-									})
-									.then(CommandManager.argument("value", IntegerArgumentType.integer())
-											.executes((ctx) -> {
-												int integerArg = IntegerArgumentType.getInteger(ctx, "value");
-												return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " add " + integerArg);
-											})
-									)
-							)
-							.then(literal("set")
-									.executes(ctx -> {
-										return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " set");
-									})
-									.then(CommandManager.argument("value", IntegerArgumentType.integer())
-											.executes((ctx) -> {
-												int integerArg = IntegerArgumentType.getInteger(ctx, "value");
-												return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " set " + integerArg);
-											})
-									)
-							)
-							.executes(ctx -> {
-								return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName);
-							})
-					);
+			Logger log = LogManager.getLogger("beacon");
+			ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+				Scoreboard scoreboard = server.getScoreboard();
+				for (ScoreboardObjective objective: scoreboard.getObjectives()) {
+					if (objective.getCriterion().getName().equals("trigger")) {
+						String commandName = objective.getName();
+						server.getCommandManager().getDispatcher().register(literal(commandName)
+								.then(literal("add")
+										.executes(ctx -> {
+											return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " add");
+										})
+										.then(CommandManager.argument("value", IntegerArgumentType.integer())
+												.executes((ctx) -> {
+													int integerArg = IntegerArgumentType.getInteger(ctx, "value");
+													return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " add " + integerArg);
+												})
+										)
+								)
+								.then(literal("set")
+										.executes(ctx -> {
+											return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " set");
+										})
+										.then(CommandManager.argument("value", IntegerArgumentType.integer())
+												.executes((ctx) -> {
+													int integerArg = IntegerArgumentType.getInteger(ctx, "value");
+													return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName + " set " + integerArg);
+												})
+										)
+								)
+								.executes(ctx -> {
+									return server.getCommandManager().execute(ctx.getSource(), "trigger " + commandName);
+								})
+						);
+					}
 				}
-			}
-		});
-        }
+			});
+	}
 
 	@Override
 	public void onInitialize() {
@@ -106,17 +98,17 @@ public class Mod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
                 
-                Logger log = LogManager.getLogger("beacon");
+		Logger log = LogManager.getLogger("beacon");
 		String version = FabricLoader.getInstance().getModContainer("beacon").get().getMetadata().getVersion().getFriendlyString();
 
-                try {
+		try {
 		    setupAnsiWindows();
 		    registerCommands();
 		    setupTriggerCommandAliases();
-                } catch (Exception error) {
-                    log.error(colorRed + "[Beacon] Failed to load Beacon v" + version + ", see the error below for details.");
-                    error.printStackTrace();
-                }
+		} catch (Exception error) {
+			log.error(colorRed + "[Beacon] Failed to load Beacon v" + version + ", see the error below for details.");
+			error.printStackTrace();
+		}
 		log.info(colorBlue + "[Beacon] Loaded Beacon v" + version + "successfully!");
 	}
 }
