@@ -101,7 +101,7 @@ public class Mod implements ModInitializer {
 		    setupTriggerCommandAliases();
 			log.info(colorBlue + "[Beacon] Loaded Beacon v" + version + "successfully!");
 		} catch (Exception error) {
-			log.error(colorRed + "[Beacon] Failed to load Beacon v" + version + ", see the error below for details.");
+			log.error(colorBrightRed + "[Beacon] Failed to load Beacon v" + version + ", see the error below for details.");
 			error.printStackTrace();
 		}
 	}
