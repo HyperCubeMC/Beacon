@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BeaconEventManager {
     static List<Method> eventHandlerMethods = new ArrayList<Method>();
-    
+
     public static void registerListener(BeaconEventListener listener) {
         Method[] allMethods = listener.getClass().getMethods();
         for (Method method : allMethods) {
@@ -21,7 +21,7 @@ public class BeaconEventManager {
             Class<?>[] parameterTypes = eventHandler.getParameterTypes();
 //            if (parameterTypes[0].equals(BeaconJoinEvent.class)) {
                 try {
-                    eventHandler.invoke(eventHandler.getClass().newInstance(), event.getClass().getConstructor());
+                    eventHandler.invoke(eventHandler.getClass().newInstance(), event.getClass());
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
