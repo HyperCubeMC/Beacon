@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ public class BeaconLeaveEvent extends BeaconEvent {
         final List<Method> eventHandlerMethods = BeaconEventManager.eventHandlerMethods;
         List<Method> targetEventHandlerMethods = new ArrayList<>();
         for (Method eventHandler : eventHandlerMethods) {
-            Class<?>[] parameterTypes = eventHandler.getParameterTypes();
-            if (parameterTypes[0].equals(BeaconJoinEvent.class)) {
+            BeaconEventHandler eventHandlerAnnotation = eventHandler.getAnnotation(BeaconEventHandler.class);
+            if (eventHandlerAnnotation.value() == BeaconJoinEvent.class) {
                 targetEventHandlerMethods.add(eventHandler);
             }
         }

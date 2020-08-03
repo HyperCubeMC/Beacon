@@ -4,7 +4,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import net.hypercubemc.beacon.api.events.BeaconEventPriority;
 
 /**
  * This is an annotation to signify a method as being a beacon event handler method
@@ -12,27 +11,32 @@ import net.hypercubemc.beacon.api.events.BeaconEventPriority;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BeaconEventHandler {
+    /**
+     * Define the class of the event that the event handler is for
+     * Example: BeaconJoinEvent.class
+     * @return The class of the event that the event handler is for
+     */
+    Class<? extends BeaconEvent> value();
 
     /**
-     * Define the priority of the event.
+     * Define the point at which the event handler is called, PRE or POST main method code
      * <p>
-     * First priority to the last priority executed:
+     * It can be:
      * <ol>
-     * <li>LOW
-     * <li>NORMAL
-     * <li>IMPORTANT
+     * <li>PRE</li>
+     * <li>POST</li>
      * </ol>
-     *
-     * @return The priority of the event
+     * </p>
+     * @return The point at which the event handler is called, PRE or POST main method code
      */
-    BeaconEventPriority priority() default BeaconEventPriority.NORMAL;
+    BeaconEventFireStage fireStage() default BeaconEventFireStage.POST;
 
     /**
      * Controls whether the event handler ignores a cancelled event.
      * <p>
      * If ignoreCancelledEvent is true and the event is cancelled, the method is
      * not called. Otherwise, if false, the method is called even if the event gets cancelled.
-     *
+     * </p>
      * @return Whether or not cancelled events should be ignored
      */
     boolean ignoreCancelledEvent() default false;

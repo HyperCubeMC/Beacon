@@ -18,8 +18,8 @@ public class BeaconJoinEvent extends BeaconEvent {
         final List<Method> eventHandlerMethods = BeaconEventManager.eventHandlerMethods;
         List<Method> targetEventHandlerMethods = new ArrayList<>();
         for (Method eventHandler : eventHandlerMethods) {
-            Class<?>[] parameterTypes = eventHandler.getParameterTypes();
-            if (parameterTypes[0].equals(BeaconJoinEvent.class)) {
+            BeaconEventHandler eventHandlerAnnotation = eventHandler.getAnnotation(BeaconEventHandler.class);
+            if (eventHandlerAnnotation.value() == BeaconJoinEvent.class) {
                 targetEventHandlerMethods.add(eventHandler);
             }
         }
