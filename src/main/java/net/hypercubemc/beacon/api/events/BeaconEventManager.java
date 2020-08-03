@@ -6,13 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BeaconEventManager {
-    static List<Method> eventHandlerMethods = new ArrayList<>();
+    static List<Method> allEventHandlerMethods = new ArrayList<>();
+    static List<Method> joinEventHandlerMethods = new ArrayList<>();
+    static List<Method> leaveEventHandlerMethods = new ArrayList<>();
 
     public static void registerListener(BeaconEventListener listener) {
         Method[] allMethods = listener.getClass().getMethods();
         for (Method method : allMethods) {
             if (method.isAnnotationPresent(BeaconEventHandler.class)) {
-                eventHandlerMethods.add(method);
+                allEventHandlerMethods.add(method);
+            }
+        }
+        for (Method eventHandler : allEventHandlerMethods) {
+            BeaconEventHandler eventHandlerAnnotation = eventHandler.getAnnotation(BeaconEventHandler.class);
+            if (eventHandlerAnnotation.value() == BeaconJoinEvent.class) {
+                joinEventHandlerMethods.add(eventHandler);
+            } else if (eventHandlerAnnotation.value() == BeaconLeaveEvent.class) {
+                leaveEventHandlerMethods.add(eventHandler);
             }
         }
     }
