@@ -4,39 +4,39 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static net.hypercubemc.beacon.util.AnsiCodes.*;
 
-class BeaconPluginLogger {
+public class BeaconPluginLogger {
     private final String pluginName;
 
     BeaconPluginLogger(String pluginName) {
         this.pluginName = pluginName;
     }
 
-    void debug(String debug) {
+    public void debug(String debug) {
         Logger log = LogManager.getLogger(pluginName);
         log.debug(colorLightGrey + "[" + pluginName + "]" + debug + formatReset);
     }
 
-    void info(String info) {
+    public void info(String info) {
         Logger log = LogManager.getLogger(pluginName);
         log.info(formatReset + "[" + pluginName + "]" + info + formatReset);
     }
 
-    void warn(String warn) {
+    public void warn(String warn) {
         Logger log = LogManager.getLogger(pluginName);
         log.warn(colorYellow + "[" + pluginName + "]" + warn + formatReset);
     }
 
-    void error(String error) {
+    public void error(String error) {
         Logger log = LogManager.getLogger(pluginName);
         log.error(colorBrightRed + "[" + pluginName + "]" + error + formatReset);
     }
 
-    void fatal(String fatal) {
+    public void fatal(String fatal) {
         Logger log = LogManager.getLogger(pluginName);
         log.fatal(colorBrightRed + formatBold + "[" + pluginName + "]" + fatal + formatReset);
     }
 
-    void trace(String trace) {
+    public void trace(String trace) {
         Logger log = LogManager.getLogger(pluginName);
         log.trace(colorLightGrey + "[" + pluginName + "]" + trace + formatReset);
     }
