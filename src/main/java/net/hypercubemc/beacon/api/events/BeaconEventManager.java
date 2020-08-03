@@ -17,14 +17,6 @@ public class BeaconEventManager {
     }
 
     public static void callEvent(BeaconEvent event) {
-        new Thread() {
-            public void run() {
-                call(event);
-            }
-        }.start();
-    }
-
-    private static void call(BeaconEvent event) {
         for (Method eventHandler : eventHandlerMethods) {
             Class<?>[] parameterTypes = eventHandler.getParameterTypes();
 //            if (parameterTypes[0].equals(BeaconJoinEvent.class)) {

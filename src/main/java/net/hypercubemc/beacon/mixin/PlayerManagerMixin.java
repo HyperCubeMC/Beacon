@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import net.hypercubemc.beacon.BeaconPluginManager;
 import net.hypercubemc.beacon.api.events.BeaconEventManager;
 import net.hypercubemc.beacon.api.events.BeaconJoinEvent;
+import net.hypercubemc.beacon.api.events.BeaconLeaveEvent;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -36,6 +37,7 @@ public abstract class PlayerManagerMixin {
 
     @Inject(method = "remove", at = @At(value = "RETURN"))
     public void playerLeave(final ServerPlayerEntity serverPlayerEntity, CallbackInfo callbackInfo) {
-        // Placeholder for later use.
+        BeaconLeaveEvent beaconLeaveEvent = new BeaconLeaveEvent(serverPlayerEntity, callbackInfo);
+        BeaconEventManager.callEvent(beaconLeaveEvent);
     }
 }
