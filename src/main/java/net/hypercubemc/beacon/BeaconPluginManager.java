@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class BeaconPluginManager {
     // TODO: Check if onEnable and onDisable methods exist, and the plugin name and version getter methods exist on the passed plugin
-    public void registerPlugin(BeaconPluginInitializer beaconPluginInitializer) {
+    public static void registerPlugin(BeaconPluginInitializer beaconPluginInitializer) {
         String pluginName = beaconPluginInitializer.getPluginName();
         String pluginVersion = beaconPluginInitializer.getPluginVersion();
         BeaconPluginInstance beaconPluginInstance = new BeaconPluginInstance(pluginName, pluginVersion, BeaconPluginState.ENABLING);
