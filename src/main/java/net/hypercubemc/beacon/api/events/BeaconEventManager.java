@@ -6,8 +6,8 @@ import java.util.List;
 
 public class BeaconEventManager {
     static List<Method> eventHandlerMethods = new ArrayList<Method>();
-
-    public static void registerListeners(BeaconEventListener listener) {
+    
+    public static void registerListener(BeaconEventListener listener) {
         Method[] allMethods = listener.getClass().getMethods();
         for (Method method : allMethods) {
             if (method.isAnnotationPresent(BeaconEventHandler.class)) {
