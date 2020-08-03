@@ -1,11 +1,12 @@
 package net.hypercubemc.beacon.api.events;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BeaconEventManager {
-    static List<Method> eventHandlerMethods = new ArrayList<Method>();
+    static List<Method> eventHandlerMethods = new ArrayList<>();
 
     public static void registerListener(BeaconEventListener listener) {
         Method[] allMethods = listener.getClass().getMethods();
@@ -16,16 +17,9 @@ public class BeaconEventManager {
         }
     }
 
-    public static void callEvent(BeaconEvent event) {
-        for (Method eventHandler : eventHandlerMethods) {
-            Class<?>[] parameterTypes = eventHandler.getParameterTypes();
-//            if (parameterTypes[0].equals(BeaconJoinEvent.class)) {
-                try {
-                    eventHandler.invoke(eventHandler.getClass().newInstance(), event.getClass());
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-//            }
+    static void fire(final List<Method> methods, final Object... arguments) throws InvocationTargetException, IllegalAccessException {
+        for (final Method method : methods) {
+            method.invoke(null, arguments);
         }
     }
 }

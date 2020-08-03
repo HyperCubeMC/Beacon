@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerManager.class)
 public abstract class PlayerManagerMixin {
-
     @Shadow
     public abstract void addToOperators(GameProfile profile);
 
@@ -31,13 +30,11 @@ public abstract class PlayerManagerMixin {
         if (gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
             this.addToOperators(gameProfile);
         }
-        BeaconJoinEvent beaconJoinEvent = new BeaconJoinEvent(clientConnection, playerEntity, callbackInfo);
-        BeaconEventManager.callEvent(beaconJoinEvent);
+        BeaconJoinEvent.fire(clientConnection, playerEntity, callbackInfo);
     }
 
     @Inject(method = "remove", at = @At(value = "RETURN"))
-    public void playerLeave(final ServerPlayerEntity serverPlayerEntity, CallbackInfo callbackInfo) {
-        BeaconLeaveEvent beaconLeaveEvent = new BeaconLeaveEvent(serverPlayerEntity, callbackInfo);
-        BeaconEventManager.callEvent(beaconLeaveEvent);
+    public void playerLeave(final ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
+        BeaconLeaveEvent.fire(playerEntity, callbackInfo);
     }
 }
