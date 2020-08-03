@@ -10,7 +10,7 @@ public class BeaconPluginInstance {
     private final String pluginVersion;
     private BeaconPluginState pluginState;
 
-    public BeaconPluginInstance(String pluginName, String pluginVersion, BeaconPluginState pluginState) {
+    BeaconPluginInstance(String pluginName, String pluginVersion, BeaconPluginState pluginState) {
         this.pluginName = pluginName;
         this.pluginVersion = pluginVersion;
         this.pluginState = pluginState;

@@ -1,4 +1,4 @@
-package net.hypercubemc.beacon;
+package net.hypercubemc.beacon.util;
 
 public class AnsiCodes {
     public static final String formatReset = "\033[0m";

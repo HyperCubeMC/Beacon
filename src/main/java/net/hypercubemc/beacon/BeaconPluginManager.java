@@ -1,9 +1,6 @@
 package net.hypercubemc.beacon;
 
-import net.hypercubemc.beacon.BeaconPluginInitializer;
-import net.hypercubemc.beacon.BeaconPluginInstance;
-import net.hypercubemc.beacon.BeaconPluginState;
-import static net.hypercubemc.beacon.AnsiCodes.*;
+import static net.hypercubemc.beacon.util.AnsiCodes.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
