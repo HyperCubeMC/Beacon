@@ -125,7 +125,8 @@ work) run the object code and to modify the work, including scripts to
 control those activities.  However, it does not include the work's
 System Libraries, or general-purpose tools or generally available free
 programs which are used unmodified in performing those activities but
-which are not part of the work.  For example, Corresponding Source
+which are not part of the work, or any proprietary code or applications
+not owned by the copyright owner.  For example, Corresponding Source
 includes interface definition files associated with source files for
 the work, and the source code for shared libraries and dynamically
 linked subprograms that the work is specifically designed to require,
@@ -659,6 +660,3 @@ specific requirements.
 if any, to sign a "copyright disclaimer" for the program, if necessary.
 For more information on this, and how to apply and follow the GNU AGPL, see
 <https://www.gnu.org/licenses/>.
-
-THIS LICENSE ONLY APPLIES TO THE CODE IN THIS PROJECT; IT DOES NOT APPLY TO ANY THIRD-PARTY CODE OR LIBRARIES USED IN THIS PROJECT.
-YOU ARE NOT REQUIRED TO PROVIDE OR DISTRIBUTE SOURCE CODE OF ANY THIRD-PARTY CODE, LIBRARIES, ENGINES, GAMES, OR ANYTHING ELSE NOT OWNED BY THE COPYRIGHT OWNER.
