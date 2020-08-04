@@ -1,7 +1,10 @@
 package net.hypercubemc.beacon.api.events;
 
 /**
- * All Beacon events extend this
+ * All internal Beacon event classes extend this
+ * <p>
+ * END DEVELOPERS DO NOT USE THIS!
+ * </p>
 */
 public class BeaconEvent {
 

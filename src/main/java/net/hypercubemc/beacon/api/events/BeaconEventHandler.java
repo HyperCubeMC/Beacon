@@ -13,7 +13,9 @@ import java.lang.annotation.Target;
 public @interface BeaconEventHandler {
     /**
      * Define the class of the event that the event handler is for
+     * <p>
      * Example: BeaconJoinEvent.class
+     * </p>
      * @return The class of the event that the event handler is for
      */
     Class<? extends BeaconEvent> value();
@@ -26,7 +28,6 @@ public @interface BeaconEventHandler {
      * <li>PRE</li>
      * <li>POST</li>
      * </ol>
-     * </p>
      * @deprecated Not implemented yet
      * @return The point at which the event handler is called, PRE or POST main method code
      */

@@ -8,11 +8,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.hypercubemc.beacon.util.AnsiCodes.colorBrightRed;
-
 /**
- * This is a general manager for Beacon events
-*/
+ * This is the general manager for Beacon events
+ */
 public class BeaconEventManager {
     private static final Logger log = LogManager.getLogger("Beacon");
 
@@ -22,8 +20,11 @@ public class BeaconEventManager {
 
     /**
      * Registers a BeaconEventListener
+     * <p>
      * Use this to register your event listener class after implementing
      * BeaconEventListener and adding event handlers
+     * </p>
+     * @param listener - Your event listener class implementing BeaconEventListener
     */
     public static void registerListener(BeaconEventListener listener) {
         Method[] allMethods = listener.getClass().getMethods();

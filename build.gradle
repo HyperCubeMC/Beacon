@@ -63,6 +63,15 @@ tasks.withType(JavaCompile) {
 	options.encoding = "UTF-8"
 }
 
+javadoc {
+	source = sourceSets.main.allJava
+	exclude 'src/main/resources/*'
+}
+
+java {
+	withJavadocJar()
+}
+
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 // if it is present.
 // If you remove this task, sources will not be generated.
@@ -81,7 +90,7 @@ publishing {
 		mavenJava(MavenPublication) {
 			// Set artifactId
 			artifactId = archivesBaseName
-			// add all the jars that should be included when publishing to maven
+			// Add all the jars that should be included when publishing to maven
 			artifact(remapJar) {
 				builtBy remapJar
 			}
