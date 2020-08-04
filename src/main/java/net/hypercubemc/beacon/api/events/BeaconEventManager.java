@@ -33,7 +33,7 @@ public class BeaconEventManager {
             }
         }
     }
-
+    
     static void fire(final List<Method> methods, final Object... arguments) {
         try {
             for (final Method method : methods) {
