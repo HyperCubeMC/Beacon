@@ -74,10 +74,6 @@ jar {
 	from "LICENSE"
 }
 
-java {
-    addJavadocJar()
-}
-
 // configure the maven publication
 publishing {
 	publications {
