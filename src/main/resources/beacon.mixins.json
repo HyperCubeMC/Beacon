@@ -9,7 +9,8 @@
     "OPFillCommandSpawnProtectionMixin",
     "OPSetBlockCommandSpawnProtectionMixin",
     "OPSpawnProtectionMixin",
-    "PlayerManagerMixin"
+    "PlayerManagerMixin",
+    "LivingPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

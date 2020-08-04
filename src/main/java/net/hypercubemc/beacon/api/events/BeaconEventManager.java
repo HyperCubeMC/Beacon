@@ -17,6 +17,7 @@ public class BeaconEventManager {
     static List<Method> allEventHandlerMethods = new ArrayList<>();
     static List<Method> playerJoinEventHandlerMethods = new ArrayList<>();
     static List<Method> playerLeaveEventHandlerMethods = new ArrayList<>();
+    static List<Method> playerDeathEventHandlerMethods = new ArrayList<>();
 
     /**
      * Registers a BeaconEventListener
@@ -39,6 +40,8 @@ public class BeaconEventManager {
                 playerJoinEventHandlerMethods.add(eventHandler);
             } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
                 playerLeaveEventHandlerMethods.add(eventHandler);
+            } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
+                playerDeathEventHandlerMethods.add(eventHandler);
             }
         }
     }
