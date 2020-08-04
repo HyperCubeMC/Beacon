@@ -3,7 +3,6 @@ package net.hypercubemc.beacon.api.events;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -25,9 +24,9 @@ public class BeaconEventManager {
         }
         for (Method eventHandler : allEventHandlerMethods) {
             BeaconEventHandler eventHandlerAnnotation = eventHandler.getAnnotation(BeaconEventHandler.class);
-            if (eventHandlerAnnotation.value() == BeaconJoinEvent.class) {
+            if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
                 playerJoinEventHandlerMethods.add(eventHandler);
-            } else if (eventHandlerAnnotation.value() == BeaconLeaveEvent.class) {
+            } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
                 playerLeaveEventHandlerMethods.add(eventHandler);
             }
         }
