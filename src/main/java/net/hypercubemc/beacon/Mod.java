@@ -50,7 +50,6 @@ public class Mod implements ModInitializer {
 	}
 
 	public void setupTriggerCommandAliases() {
-		Logger log = LogManager.getLogger("beacon");
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			Scoreboard scoreboard = server.getScoreboard();
 			for (ScoreboardObjective objective: scoreboard.getObjectives()) {
@@ -88,6 +87,10 @@ public class Mod implements ModInitializer {
 		});
 	}
 
+	public void setupBetterLogging() {
+		System.setProperty("log4j.configurationFile", "resources/log4j2.xml");
+	}
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -100,9 +103,10 @@ public class Mod implements ModInitializer {
 		    setupAnsiWindows();
 		    registerCommands();
 		    setupTriggerCommandAliases();
-			log.info(colorBlue + "[Beacon] Loaded Beacon v" + version + "successfully!");
+		    setupBetterLogging();
+			log.info("Loaded Beacon v" + version + " successfully!");
 		} catch (Exception error) {
-			log.error(colorBrightRed + "[Beacon] Failed to load Beacon v" + version + ", see the error below for details.");
+			log.error("Failed to load Beacon v" + version + ", see the error below for details.");
 			error.printStackTrace();
 		}
 	}

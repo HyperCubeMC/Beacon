@@ -14,19 +14,19 @@ public class BeaconPluginLogger {
     }
 
     public void debug(String debug) {
-        log.debug(colorLightGrey + "[" + pluginName + "]" + debug + formatReset);
+        log.debug(debug);
     }
 
     public void info(String info) {
-        log.info(formatReset + "[" + pluginName + "]" + info + formatReset);
+        log.info(info);
     }
 
     public void warn(String warn) {
-        log.warn(colorYellow + "[" + pluginName + "]" + warn + formatReset);
+        log.warn(warn);
     }
 
     public void error(String error) {
-        log.error(colorBrightRed + "[" + pluginName + "]" + error + formatReset);
+        log.error(error);
     }
 
     public void fatal(String fatal) {
@@ -34,6 +34,6 @@ public class BeaconPluginLogger {
     }
 
     public void trace(String trace) {
-        log.trace(colorLightGrey + "[" + pluginName + "]" + trace + formatReset);
+        log.trace(trace);
     }
 }

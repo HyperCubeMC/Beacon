@@ -33,14 +33,14 @@ public class BeaconEventManager {
             }
         }
     }
-    
+
     static void fire(final List<Method> methods, final Object... arguments) {
         try {
             for (final Method method : methods) {
                 method.invoke(null, arguments);
             }
         } catch (InvocationTargetException | IllegalAccessException error) {
-            log.error(colorBrightRed + "[Beacon] An error occurred while attempting to fire the event " + StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getSimpleName() + ", see the error below for details.");
+            log.error("An error occurred while attempting to fire the event " + StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getSimpleName() + ", see the error below for details.");
             error.printStackTrace();
         }
     }
