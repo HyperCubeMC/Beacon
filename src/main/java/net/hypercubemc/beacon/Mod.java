@@ -21,6 +21,8 @@ import com.sun.jna.platform.win32.WinDef.*;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 
 public class Mod implements ModInitializer {
+	private static final Logger log = LogManager.getLogger("Beacon");
+
 	public void setupAnsiWindows() {
 		if (System.getProperty("os.name").startsWith("Windows")) {
 			// Set output mode to handle virtual terminal sequences
@@ -91,8 +93,7 @@ public class Mod implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-                
-		Logger log = LogManager.getLogger("beacon");
+
 		String version = FabricLoader.getInstance().getModContainer("beacon").get().getMetadata().getVersion().getFriendlyString();
 
 		try {

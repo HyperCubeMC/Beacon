@@ -11,6 +11,8 @@ import java.util.List;
 import static net.hypercubemc.beacon.util.AnsiCodes.colorBrightRed;
 
 public class BeaconEventManager {
+    private static final Logger log = LogManager.getLogger("Beacon");
+
     static List<Method> allEventHandlerMethods = new ArrayList<>();
     static List<Method> playerJoinEventHandlerMethods = new ArrayList<>();
     static List<Method> playerLeaveEventHandlerMethods = new ArrayList<>();
@@ -38,7 +40,6 @@ public class BeaconEventManager {
                 method.invoke(null, arguments);
             }
         } catch (InvocationTargetException | IllegalAccessException error) {
-            Logger log = LogManager.getLogger("beacon");
             log.error(colorBrightRed + "[Beacon] An error occurred while attempting to fire the event " + StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getSimpleName() + ", see the error below for details.");
             error.printStackTrace();
         }
