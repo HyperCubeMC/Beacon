@@ -30,7 +30,7 @@ public class BeaconPluginLogger {
     }
 
     public void fatal(String fatal) {
-        log.fatal(colorBrightRed + formatBold + "[" + pluginName + "]" + fatal + formatReset);
+        log.fatal(fatal);
     }
 
     public void trace(String trace) {
