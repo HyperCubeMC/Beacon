@@ -13,7 +13,6 @@ import net.minecraft.server.command.CommandManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static net.hypercubemc.beacon.util.AnsiCodes.*;
 import static net.minecraft.server.command.CommandManager.literal;
 
 import com.sun.jna.*;
@@ -50,6 +49,7 @@ public class Mod implements ModInitializer {
 	}
 
 	public void setupTriggerCommandAliases() {
+
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			Scoreboard scoreboard = server.getScoreboard();
 			for (ScoreboardObjective objective: scoreboard.getObjectives()) {

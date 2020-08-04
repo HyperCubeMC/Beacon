@@ -10,7 +10,8 @@
     "OPSetBlockCommandSpawnProtectionMixin",
     "OPSpawnProtectionMixin",
     "PlayerManagerMixin",
-    "LivingPlayerMixin"
+    "LivingPlayerMixin",
+    "ServerPlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

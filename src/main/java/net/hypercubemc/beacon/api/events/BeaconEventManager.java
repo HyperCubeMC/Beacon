@@ -21,6 +21,8 @@ public class BeaconEventManager {
     static List<Method> postPlayerLeaveEventHandlerMethods = new ArrayList<>();
     static List<Method> prePlayerDeathEventHandlerMethods = new ArrayList<>();
     static List<Method> postPlayerDeathEventHandlerMethods = new ArrayList<>();
+    static List<Method> prePlayerBreakBlockEventHandlerMethods = new ArrayList<>();
+    static List<Method> postPlayerBreakBlockEventHandlerMethods = new ArrayList<>();
 
     /**
      * Registers a BeaconEventListener
@@ -46,6 +48,8 @@ public class BeaconEventManager {
                     prePlayerLeaveEventHandlerMethods.add(eventHandler);
                 } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
                     prePlayerDeathEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerBreakBlockEvent.class) {
+                    prePlayerBreakBlockEventHandlerMethods.add(eventHandler);
                 }
             } else if (eventHandlerAnnotation.fireStage() == BeaconEventFireStage.POST) {
                 if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
@@ -54,6 +58,8 @@ public class BeaconEventManager {
                     postPlayerLeaveEventHandlerMethods.add(eventHandler);
                 } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
                     postPlayerDeathEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerBreakBlockEvent.class) {
+                    postPlayerBreakBlockEventHandlerMethods.add(eventHandler);
                 }
             }
 
