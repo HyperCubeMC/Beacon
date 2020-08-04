@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.Predicate;
 
 @Mixin(SetBlockCommand.class)
-public class OPSetBlockCommandSpawnProtectionMixin {
+public abstract class OPSetBlockCommandSpawnProtectionMixin {
     private static ServerCommandSource source;
     @Inject(
             method = "execute(Lnet/minecraft/server/command/ServerCommandSource;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/command/arguments/BlockStateArgument;Lnet/minecraft/server/command/SetBlockCommand$Mode;Ljava/util/function/Predicate;)I",
