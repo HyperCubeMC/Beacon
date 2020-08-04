@@ -8,8 +8,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class BeaconPlayerJoinEvent extends BeaconEvent {
-    public static void fire(ClientConnection clientConnection, ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
-        final List<Method> playerJoinEventHandlerMethods = BeaconEventManager.playerJoinEventHandlerMethods;
-        BeaconEventManager.fire(playerJoinEventHandlerMethods, clientConnection, playerEntity, callbackInfo);
+    public static void firePre(ClientConnection clientConnection, ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
+        final List<Method> prePlayerJoinEventHandlerMethods = BeaconEventManager.prePlayerJoinEventHandlerMethods;
+        BeaconEventManager.fire(prePlayerJoinEventHandlerMethods, clientConnection, playerEntity, callbackInfo);
+    }
+    public static void firePost(ClientConnection clientConnection, ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
+        final List<Method> postPlayerJoinEventHandlerMethods = BeaconEventManager.postPlayerJoinEventHandlerMethods;
+        BeaconEventManager.fire(postPlayerJoinEventHandlerMethods, clientConnection, playerEntity, callbackInfo);
     }
 }

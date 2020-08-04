@@ -15,9 +15,12 @@ public class BeaconEventManager {
     private static final Logger log = LogManager.getLogger("Beacon");
 
     static List<Method> allEventHandlerMethods = new ArrayList<>();
-    static List<Method> playerJoinEventHandlerMethods = new ArrayList<>();
-    static List<Method> playerLeaveEventHandlerMethods = new ArrayList<>();
-    static List<Method> playerDeathEventHandlerMethods = new ArrayList<>();
+    static List<Method> prePlayerJoinEventHandlerMethods = new ArrayList<>();
+    static List<Method> postPlayerJoinEventHandlerMethods = new ArrayList<>();
+    static List<Method> prePlayerLeaveEventHandlerMethods = new ArrayList<>();
+    static List<Method> postPlayerLeaveEventHandlerMethods = new ArrayList<>();
+    static List<Method> prePlayerDeathEventHandlerMethods = new ArrayList<>();
+    static List<Method> postPlayerDeathEventHandlerMethods = new ArrayList<>();
 
     /**
      * Registers a BeaconEventListener
@@ -36,13 +39,24 @@ public class BeaconEventManager {
         }
         for (Method eventHandler : allEventHandlerMethods) {
             BeaconEventHandler eventHandlerAnnotation = eventHandler.getAnnotation(BeaconEventHandler.class);
-            if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
-                playerJoinEventHandlerMethods.add(eventHandler);
-            } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
-                playerLeaveEventHandlerMethods.add(eventHandler);
-            } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
-                playerDeathEventHandlerMethods.add(eventHandler);
+            if (eventHandlerAnnotation.fireStage() == BeaconEventFireStage.PRE) {
+                if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
+                    prePlayerJoinEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
+                    prePlayerLeaveEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
+                    prePlayerDeathEventHandlerMethods.add(eventHandler);
+                }
+            } else if (eventHandlerAnnotation.fireStage() == BeaconEventFireStage.POST) {
+                if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
+                    postPlayerJoinEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
+                    postPlayerLeaveEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
+                    postPlayerDeathEventHandlerMethods.add(eventHandler);
+                }
             }
+
         }
     }
 

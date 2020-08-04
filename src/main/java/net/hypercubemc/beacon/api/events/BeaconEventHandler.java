@@ -21,17 +21,15 @@ public @interface BeaconEventHandler {
     Class<? extends BeaconEvent> value();
 
     /**
-     * Define the point at which the event handler is called, PRE or POST main method code
+     * Define the point at which the event handler is called, before or after main method code
      * <p>
      * It can be:
      * <ol>
      * <li>PRE</li>
      * <li>POST</li>
      * </ol>
-     * @deprecated Not implemented yet
      * @return The point at which the event handler is called, PRE or POST main method code
      */
-    @Deprecated
     BeaconEventFireStage fireStage() default BeaconEventFireStage.POST;
 
     /**

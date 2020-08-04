@@ -10,8 +10,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingPlayerMixin {
-    @Inject(method = "onDeath", at = @At(value = "RETURN"))
-    public void playerDeath(DamageSource source, CallbackInfo callbackInfo) {
-        BeaconPlayerDeathEvent.fire(source, callbackInfo);
+    @Inject(method = "onDeath", at = @At(value = "HEAD"))
+    public void prePlayerDeath(DamageSource source, CallbackInfo callbackInfo) {
+        BeaconPlayerDeathEvent.firePre(source, callbackInfo);
+    }
+    @Inject(method = "onDeath", at = @At(value = "TAIL"))
+    public void postPlayerDeath(DamageSource source, CallbackInfo callbackInfo) {
+        BeaconPlayerDeathEvent.firePost(source, callbackInfo);
     }
 }
