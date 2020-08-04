@@ -1,14 +1,20 @@
 package net.hypercubemc.beacon.api.events;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.hypercubemc.beacon.util.AnsiCodes.colorBrightRed;
+
 public class BeaconEventManager {
     static List<Method> allEventHandlerMethods = new ArrayList<>();
-    static List<Method> joinEventHandlerMethods = new ArrayList<>();
-    static List<Method> leaveEventHandlerMethods = new ArrayList<>();
+    static List<Method> playerJoinEventHandlerMethods = new ArrayList<>();
+    static List<Method> playerLeaveEventHandlerMethods = new ArrayList<>();
 
     public static void registerListener(BeaconEventListener listener) {
         Method[] allMethods = listener.getClass().getMethods();
@@ -20,16 +26,22 @@ public class BeaconEventManager {
         for (Method eventHandler : allEventHandlerMethods) {
             BeaconEventHandler eventHandlerAnnotation = eventHandler.getAnnotation(BeaconEventHandler.class);
             if (eventHandlerAnnotation.value() == BeaconJoinEvent.class) {
-                joinEventHandlerMethods.add(eventHandler);
+                playerJoinEventHandlerMethods.add(eventHandler);
             } else if (eventHandlerAnnotation.value() == BeaconLeaveEvent.class) {
-                leaveEventHandlerMethods.add(eventHandler);
+                playerLeaveEventHandlerMethods.add(eventHandler);
             }
         }
     }
 
-    static void fire(final List<Method> methods, final Object... arguments) throws InvocationTargetException, IllegalAccessException {
-        for (final Method method : methods) {
-            method.invoke(null, arguments);
+    static void fire(final List<Method> methods, final Object... arguments) {
+        try {
+            for (final Method method : methods) {
+                method.invoke(null, arguments);
+            }
+        } catch (InvocationTargetException | IllegalAccessException error) {
+            Logger log = LogManager.getLogger("beacon");
+            log.error(colorBrightRed + "[Beacon] An error occurred while attempting to fire the event " + StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getSimpleName() + ", see the error below for details.");
+            error.printStackTrace();
         }
     }
 }
