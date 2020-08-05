@@ -23,6 +23,8 @@ public class BeaconEventManager {
     static List<Method> postPlayerDeathEventHandlerMethods = new ArrayList<>();
     static List<Method> prePlayerBreakBlockEventHandlerMethods = new ArrayList<>();
     static List<Method> postPlayerBreakBlockEventHandlerMethods = new ArrayList<>();
+    static List<Method> prePlayerPlaceBlockEventHandlerMethods = new ArrayList<>();
+    static List<Method> postPlayerPlaceBlockEventHandlerMethods = new ArrayList<>();
     static List<Method> prePlayerInteractEntityEventHandlerMethods = new ArrayList<>();
     static List<Method> postPlayerInteractEntityEventHandlerMethods = new ArrayList<>();
 
@@ -52,6 +54,8 @@ public class BeaconEventManager {
                     prePlayerDeathEventHandlerMethods.add(eventHandler);
                 } else if (eventHandlerAnnotation.value() == BeaconPlayerBreakBlockEvent.class) {
                     prePlayerBreakBlockEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerPlaceBlockEvent.class) {
+                    prePlayerPlaceBlockEventHandlerMethods.add(eventHandler);
                 } else if (eventHandlerAnnotation.value() == BeaconPlayerInteractEntityEvent.class) {
                     prePlayerInteractEntityEventHandlerMethods.add(eventHandler);
                 }
@@ -64,6 +68,8 @@ public class BeaconEventManager {
                     postPlayerDeathEventHandlerMethods.add(eventHandler);
                 } else if (eventHandlerAnnotation.value() == BeaconPlayerBreakBlockEvent.class) {
                     postPlayerBreakBlockEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerPlaceBlockEvent.class) {
+                    postPlayerPlaceBlockEventHandlerMethods.add(eventHandler);
                 } else if (eventHandlerAnnotation.value() == BeaconPlayerInteractEntityEvent.class) {
                     postPlayerInteractEntityEventHandlerMethods.add(eventHandler);
                 }
