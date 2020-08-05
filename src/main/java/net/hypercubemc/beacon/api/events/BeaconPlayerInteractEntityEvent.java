@@ -10,9 +10,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class BeaconPlayerInteractEntityEvent extends BeaconEvent {
-    public static void firePre(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo, PlayerEntity player) {
+    public static void firePre(PlayerInteractEntityC2SPacket packet, PlayerEntity player, CallbackInfo callbackInfo) {
         final List<Method> prePlayerInteractEntityEventHandlerMethods = BeaconEventManager.prePlayerInteractEntityEventHandlerMethods;
-        BeaconEventManager.fire(prePlayerInteractEntityEventHandlerMethods, packet, callbackInfo, player);
+        BeaconEventManager.fire(prePlayerInteractEntityEventHandlerMethods, packet, player, callbackInfo);
     }
     public static void firePost(PlayerInteractEntityC2SPacket packet, PlayerEntity player) {
         final List<Method> postPlayerInteractEntityEventHandlerMethods = BeaconEventManager.postPlayerInteractEntityEventHandlerMethods;
