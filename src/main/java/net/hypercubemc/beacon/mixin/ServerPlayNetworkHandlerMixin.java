@@ -26,6 +26,6 @@ public abstract class ServerPlayNetworkHandlerMixin {
     }
     @Inject(method = "onPlayerInteractEntity", at = @At(value = "TAIL"))
     public void postPlayerInteractEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
-        BeaconPlayerInteractEntityEvent.firePost(packet, callbackInfo, player);
+        BeaconPlayerInteractEntityEvent.firePost(packet, player);
     }
 }

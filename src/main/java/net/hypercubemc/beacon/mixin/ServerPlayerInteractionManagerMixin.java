@@ -25,8 +25,7 @@ public abstract class ServerPlayerInteractionManagerMixin {
 
     @Inject(method = "tryBreakBlock",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/block/Block;onBreak(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V"),
-            locals = LocalCapture.CAPTURE_FAILHARD,
+            target = "Lnet/minecraft/block/Block;onBreak(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)V"),
             cancellable = true)
     private void preBreakBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir, BlockState blockState, BlockEntity entity, Block block) {
         BeaconPlayerBreakBlockEvent.firePre(pos, cir, blockState, entity, block, player, world);
@@ -34,10 +33,9 @@ public abstract class ServerPlayerInteractionManagerMixin {
 
     @Inject(method = "tryBreakBlock",
             at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/block/Block;afterBreak(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/item/ItemStack;)V"),
-            locals = LocalCapture.CAPTURE_FAILHARD
+            target = "Lnet/minecraft/block/Block;afterBreak(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/item/ItemStack;)V")
     )
     private void postBreakBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir, BlockState blockState, BlockEntity entity, Block block) {
-        BeaconPlayerBreakBlockEvent.firePost(pos, cir, blockState, entity, block, player, world);
+        BeaconPlayerBreakBlockEvent.firePost(pos, blockState, entity, block, player, world);
     }
 }

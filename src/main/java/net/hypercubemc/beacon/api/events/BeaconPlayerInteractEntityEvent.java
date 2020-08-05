@@ -14,8 +14,8 @@ public class BeaconPlayerInteractEntityEvent extends BeaconEvent {
         final List<Method> prePlayerInteractEntityEventHandlerMethods = BeaconEventManager.prePlayerInteractEntityEventHandlerMethods;
         BeaconEventManager.fire(prePlayerInteractEntityEventHandlerMethods, packet, callbackInfo, player);
     }
-    public static void firePost(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo, PlayerEntity player) {
+    public static void firePost(PlayerInteractEntityC2SPacket packet, PlayerEntity player) {
         final List<Method> postPlayerInteractEntityEventHandlerMethods = BeaconEventManager.postPlayerInteractEntityEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerInteractEntityEventHandlerMethods, packet, callbackInfo, player);
+        BeaconEventManager.fire(postPlayerInteractEntityEventHandlerMethods, packet, player);
     }
 }

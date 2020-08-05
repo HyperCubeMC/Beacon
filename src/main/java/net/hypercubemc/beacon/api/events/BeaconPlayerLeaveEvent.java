@@ -7,12 +7,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class BeaconPlayerLeaveEvent extends BeaconEvent {
-    public static void firePre(ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
+    public static void firePre(ServerPlayerEntity player, CallbackInfo callbackInfo) {
         final List<Method> prePlayerLeaveEventHandlerMethods = BeaconEventManager.prePlayerLeaveEventHandlerMethods;
-        BeaconEventManager.fire(prePlayerLeaveEventHandlerMethods, playerEntity, callbackInfo);
+        BeaconEventManager.fire(prePlayerLeaveEventHandlerMethods, player, callbackInfo);
     }
-    public static void firePost(ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
+    public static void firePost(ServerPlayerEntity player) {
         final List<Method> postPlayerLeaveEventHandlerMethods = BeaconEventManager.postPlayerLeaveEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerLeaveEventHandlerMethods, playerEntity, callbackInfo);
+        BeaconEventManager.fire(postPlayerLeaveEventHandlerMethods, player);
     }
 }

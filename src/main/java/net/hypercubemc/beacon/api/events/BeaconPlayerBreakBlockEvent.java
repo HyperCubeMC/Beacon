@@ -18,8 +18,8 @@ public class BeaconPlayerBreakBlockEvent extends BeaconEvent {
         final List<Method> prePlayerBreakBlockEventHandlerMethods = BeaconEventManager.prePlayerBreakBlockEventHandlerMethods;
         BeaconEventManager.fire(prePlayerBreakBlockEventHandlerMethods, pos, cir, blockState, entity, block, player, world);
     }
-    public static void firePost(BlockPos pos, CallbackInfoReturnable<Boolean> cir, BlockState blockState, BlockEntity entity, Block block, PlayerEntity player, ServerWorld world) {
+    public static void firePost(BlockPos pos, BlockState blockState, BlockEntity entity, Block block, PlayerEntity player, ServerWorld world) {
         final List<Method> postPlayerBreakBlockEventHandlerMethods = BeaconEventManager.postPlayerBreakBlockEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerBreakBlockEventHandlerMethods, pos, cir, blockState, entity, block, player, world);
+        BeaconEventManager.fire(postPlayerBreakBlockEventHandlerMethods, pos, blockState, entity, block, player, world);
     }
 }

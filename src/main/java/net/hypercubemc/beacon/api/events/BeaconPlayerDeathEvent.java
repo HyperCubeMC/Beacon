@@ -11,8 +11,8 @@ public class BeaconPlayerDeathEvent extends BeaconEvent {
         final List<Method> prePlayerDeathEventHandlerMethods = BeaconEventManager.prePlayerDeathEventHandlerMethods;
         BeaconEventManager.fire(prePlayerDeathEventHandlerMethods, source, callbackInfo);
     }
-    public static void firePost(DamageSource source, CallbackInfo callbackInfo) {
+    public static void firePost(DamageSource source) {
         final List<Method> postPlayerDeathEventHandlerMethods = BeaconEventManager.postPlayerDeathEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerDeathEventHandlerMethods, source, callbackInfo);
+        BeaconEventManager.fire(postPlayerDeathEventHandlerMethods, source);
     }
 }

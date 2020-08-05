@@ -12,8 +12,8 @@ public class BeaconPlayerJoinEvent extends BeaconEvent {
         final List<Method> prePlayerJoinEventHandlerMethods = BeaconEventManager.prePlayerJoinEventHandlerMethods;
         BeaconEventManager.fire(prePlayerJoinEventHandlerMethods, clientConnection, playerEntity, callbackInfo);
     }
-    public static void firePost(ClientConnection clientConnection, ServerPlayerEntity playerEntity, CallbackInfo callbackInfo) {
+    public static void firePost(ClientConnection clientConnection, ServerPlayerEntity playerEntity) {
         final List<Method> postPlayerJoinEventHandlerMethods = BeaconEventManager.postPlayerJoinEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerJoinEventHandlerMethods, clientConnection, playerEntity, callbackInfo);
+        BeaconEventManager.fire(postPlayerJoinEventHandlerMethods, clientConnection, playerEntity);
     }
 }
