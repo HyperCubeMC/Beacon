@@ -1,6 +1,7 @@
 package net.hypercubemc.beacon.mixin;
 
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
+import net.hypercubemc.beacon.api.events.BeaconPlayerAttackEntityEvent;
 import net.hypercubemc.beacon.api.events.BeaconPlayerInteractEntityEvent;
 import net.hypercubemc.beacon.api.events.BeaconPlayerPlaceBlockEvent;
 import net.minecraft.entity.Entity;
@@ -25,10 +26,13 @@ public abstract class ServerPlayNetworkHandlerMixin {
     @Inject(method = "onPlayerInteractEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;interactAt(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"), cancellable = true)
     public void prePlayerInteractEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
         BeaconPlayerInteractEntityEvent.firePre(packet, callbackInfo, player);
-    }
-    @Inject(method = "onPlayerInteractEntity", at = @At(value = "TAIL"))
-    public void postPlayerInteractEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
         BeaconPlayerInteractEntityEvent.firePost(packet, player);
+    }
+
+    @Inject(method = "onPlayerInteractEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"), cancellable = true)
+    public void prePlayerAttackEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
+        BeaconPlayerAttackEntityEvent.firePre(packet, callbackInfo, player);
+        BeaconPlayerAttackEntityEvent.firePost(packet, player);
     }
 
     @Inject(method = "onPlayerInteractBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;canPlace(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;)Z"), cancellable = true)

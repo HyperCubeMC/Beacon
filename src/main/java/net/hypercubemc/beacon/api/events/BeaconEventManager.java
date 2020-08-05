@@ -27,6 +27,8 @@ public class BeaconEventManager {
     static List<Method> postPlayerPlaceBlockEventHandlerMethods = new ArrayList<>();
     static List<Method> prePlayerInteractEntityEventHandlerMethods = new ArrayList<>();
     static List<Method> postPlayerInteractEntityEventHandlerMethods = new ArrayList<>();
+    static List<Method> prePlayerAttackEntityEventHandlerMethods = new ArrayList<>();
+    static List<Method> postPlayerAttackEntityEventHandlerMethods = new ArrayList<>();
 
     /**
      * Registers a BeaconEventListener
