@@ -7,6 +7,8 @@ package net.hypercubemc.beacon.api.events;
  * <br>
  * Then, start adding event handlers by annotating methods with {@link net.hypercubemc.beacon.api.events.BeaconEventHandler @BeaconEventHandler}
  * <br>
+ * Keep in mind that event handler methods MUST BE STATIC!
+ * <br>
  * Specify the event in the value of the annotation, with .class on the end
  * <br>
  * Once your event listener class is completed, in your main class or elsewhere, use {@link net.hypercubemc.beacon.api.events.BeaconEventManager#registerListener BeaconEventManager.registerPlugin(YourBeaconEventListenerClass)} to register your event listener class and your event handlers

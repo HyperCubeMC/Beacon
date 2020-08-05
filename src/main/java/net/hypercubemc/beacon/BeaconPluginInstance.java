@@ -1,7 +1,6 @@
 package net.hypercubemc.beacon;
 
-import net.hypercubemc.beacon.BeaconPluginState;
-import net.hypercubemc.beacon.BeaconPluginLogger;
+import net.hypercubemc.beacon.api.chat.BeaconChatManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -62,5 +61,14 @@ public class BeaconPluginInstance {
      */
     public BeaconPluginLogger getLogger() {
         return new BeaconPluginLogger(pluginName);
+    }
+
+    /**
+     * Gets the ChatManager class
+     * It has useful methods to manage the chat
+     * @return ChatManager
+     */
+    public BeaconChatManager getChatManager() {
+        return BeaconChatManager.getInstance();
     }
 }
