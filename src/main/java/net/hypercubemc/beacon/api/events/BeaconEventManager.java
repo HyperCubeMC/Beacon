@@ -29,6 +29,8 @@ public class BeaconEventManager {
     static List<Method> postPlayerInteractEntityEventHandlerMethods = new ArrayList<>();
     static List<Method> prePlayerAttackEntityEventHandlerMethods = new ArrayList<>();
     static List<Method> postPlayerAttackEntityEventHandlerMethods = new ArrayList<>();
+    static List<Method> prePlayerChatEventHandlerMethods = new ArrayList<>();
+    static List<Method> postPlayerChatEventHandlerMethods = new ArrayList<>();
 
     /**
      * Registers a BeaconEventListener
@@ -60,6 +62,8 @@ public class BeaconEventManager {
                     prePlayerPlaceBlockEventHandlerMethods.add(eventHandler);
                 } else if (eventHandlerAnnotation.value() == BeaconPlayerInteractEntityEvent.class) {
                     prePlayerInteractEntityEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerChatEvent.class) {
+                    prePlayerChatEventHandlerMethods.add(eventHandler);
                 }
             } else if (eventHandlerAnnotation.fireStage() == BeaconEventFireStage.POST) {
                 if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
@@ -74,6 +78,8 @@ public class BeaconEventManager {
                     postPlayerPlaceBlockEventHandlerMethods.add(eventHandler);
                 } else if (eventHandlerAnnotation.value() == BeaconPlayerInteractEntityEvent.class) {
                     postPlayerInteractEntityEventHandlerMethods.add(eventHandler);
+                } else if (eventHandlerAnnotation.value() == BeaconPlayerChatEvent.class) {
+                    postPlayerChatEventHandlerMethods.add(eventHandler);
                 }
             }
         }

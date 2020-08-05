@@ -1,17 +1,14 @@
 package net.hypercubemc.beacon.mixin;
 
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.hypercubemc.beacon.api.events.BeaconPlayerAttackEntityEvent;
+import net.hypercubemc.beacon.api.events.BeaconPlayerChatEvent;
 import net.hypercubemc.beacon.api.events.BeaconPlayerInteractEntityEvent;
 import net.hypercubemc.beacon.api.events.BeaconPlayerPlaceBlockEvent;
-import net.minecraft.entity.Entity;
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,13 +32,23 @@ public abstract class ServerPlayNetworkHandlerMixin {
         BeaconPlayerAttackEntityEvent.firePost(packet, player);
     }
 
-    @Inject(method = "onPlayerInteractBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;canPlace(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;)Z"), cancellable = true)
+    @Inject(method = "onPlayerInteractBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;canPlayerModifyAt(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/BlockPos;)Z"), cancellable = true)
     public void prePlayerInteractBlock(PlayerInteractBlockC2SPacket packet, CallbackInfo callbackInfo) {
         BeaconPlayerPlaceBlockEvent.firePre(packet, callbackInfo, player);
     }
 
-    @Inject(method = "onPlayerInteractBlock", at = @At(value = "TAIL", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;canPlace(Lnet/minecraft/server/network/ServerPlayerEntity;Lnet/minecraft/item/ItemStack;)Z"))
+    @Inject(method = "onPlayerInteractBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;canPlayerModifyAt(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/BlockPos;)Z"))
     public void postPlayerInteractBlock(PlayerInteractBlockC2SPacket packet, CallbackInfo callbackInfo) {
         BeaconPlayerPlaceBlockEvent.firePost(packet, player);
+    }
+
+    @Inject(method = "onGameMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/MessageType;Ljava/util/UUID;)V"), cancellable = true)
+    public void preChatMessage(ChatMessageC2SPacket packet, CallbackInfo callbackInfo) {
+        BeaconPlayerChatEvent.firePre(packet, player, callbackInfo);
+    }
+
+    @Inject(method = "onGameMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/MessageType;Ljava/util/UUID;)V", shift = At.Shift.AFTER))
+    public void postChatMessage(ChatMessageC2SPacket packet, CallbackInfo callbackInfo) {
+        BeaconPlayerChatEvent.firePost(packet, player);
     }
 }
