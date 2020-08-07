@@ -41,6 +41,10 @@ dependencies {
 	// Dependencies for TerminalConsoleAppender for full functionality
 	include "org.jline:jline-terminal-jna:3.12.1"
 	implementation "org.jline:jline-terminal-jna:3.12.1"
+
+	// Sponge Configurate
+	include "org.spongepowered:configurate-yaml:3.7"
+	implementation "org.spongepowered:configurate-yaml:3.7"
 }
 
 processResources {

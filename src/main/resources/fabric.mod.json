@@ -3,7 +3,7 @@
   "id": "beacon",
   "version": "${version}",
   "name": "Beacon",
-  "description": "Beacon is a server-side plugin api/plugin development helper for fabric developed by Justsnoopy30.",
+  "description": "Beacon is a server-side plugin api for fabric developed by Justsnoopy30.",
   "authors": [
     "Justsnoopy30"
   ],

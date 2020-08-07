@@ -13,6 +13,8 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.hypercubemc.beacon.commands.BeaconCommand;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
+import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,12 +24,18 @@ import com.sun.jna.*;
 import com.sun.jna.platform.win32.WinDef.*;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+
 public class Mod implements ModInitializer {
 	private static final Logger log = LogManager.getLogger("Beacon");
 
 	private static MinecraftServer minecraftServer;
 
-	public void setupAnsiWindows() {
+	private static ConfigurationNode configRootNode;
+
+	public void setupAnsiOnWindows() {
 		if (System.getProperty("os.name").startsWith("Windows")) {
 			// Set output mode to handle virtual terminal sequences
 			Function GetStdHandleFunc = Function.getFunction("kernel32", "GetStdHandle");
@@ -91,6 +99,53 @@ public class Mod implements ModInitializer {
 		BeaconEventManager.registerListener(new BeaconChatManagerEventListener());
 	}
 
+	public void setupConfig() {
+		final Path configDir = FabricLoader.getInstance().getConfigDir();
+		final File configFile = configDir.resolve("beacon.yml").toFile();
+
+		YAMLConfigurationLoader configLoader = YAMLConfigurationLoader.builder()
+				.setFile(configFile)
+				.build();
+
+		boolean isFirstLoad;
+		if (!configFile.exists()) {
+			isFirstLoad = true;
+			try {
+				configFile.createNewFile();
+			} catch (IOException error) {
+				log.error("Failed to create Beacon config file, see the error below for details.");
+				error.printStackTrace();
+			}
+		} else {
+			isFirstLoad = false;
+		}
+
+		try {
+			configRootNode = configLoader.load();
+		} catch (IOException error) {
+			log.error("Failed to load Beacon config file, see the error below for details.");
+			error.printStackTrace();
+			log.warn("Falling back to in-memory config with defaults...");
+			configRootNode = configLoader.createEmptyNode();
+		}
+
+		if (isFirstLoad) {
+			configRootNode.getNode("op-beacon-dev-on-join").setValue("true");
+			try {
+				if (!configRootNode.isVirtual()) {
+					configLoader.save(configRootNode);
+				}
+			} catch (IOException error) {
+				log.error("Failed to save Beacon config file, see the error below for details.");
+				error.printStackTrace();
+			}
+		}
+	}
+
+	public static ConfigurationNode getConfig() {
+		return configRootNode;
+	}
+
 	public static MinecraftServer getMinecraftServer() {
 		return minecraftServer;
 	}
@@ -101,11 +156,12 @@ public class Mod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		String version = FabricLoader.getInstance().getModContainer("beacon").get().getMetadata().getVersion().getFriendlyString();
+		final String version = FabricLoader.getInstance().getModContainer("beacon").get().getMetadata().getVersion().getFriendlyString();
 
 		try {
-		    setupAnsiWindows();
+		    setupAnsiOnWindows();
 			setupBetterLogging();
+			setupConfig();
 		    registerCommands();
 			ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 				minecraftServer = server;

