@@ -1,13 +1,5 @@
 package net.hypercubemc.beacon.api.chat;
 
-import net.hypercubemc.beacon.api.events.BeaconEventFireStage;
-import net.hypercubemc.beacon.api.events.BeaconEventHandler;
-import net.hypercubemc.beacon.api.events.BeaconPlayerChatEvent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
-import net.minecraft.server.network.ServerPlayerEntity;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 /**
  * Contains useful methods for managing the chat
  */
