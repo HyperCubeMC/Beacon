@@ -1,5 +1,6 @@
 package net.hypercubemc.beacon;
 
+import net.fabricmc.loader.api.Version;
 import net.hypercubemc.beacon.api.chat.BeaconChatManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,10 +10,10 @@ import org.apache.logging.log4j.Logger;
  */
 public class BeaconPluginInstance {
     private final String pluginName;
-    private final String pluginVersion;
+    private final Version pluginVersion;
     private BeaconPluginState pluginState;
 
-    BeaconPluginInstance(String pluginName, String pluginVersion, BeaconPluginState pluginState) {
+    BeaconPluginInstance(String pluginName, Version pluginVersion, BeaconPluginState pluginState) {
         this.pluginName = pluginName;
         this.pluginVersion = pluginVersion;
         this.pluginState = pluginState;
@@ -28,9 +29,9 @@ public class BeaconPluginInstance {
 
     /**
      * Gets the version of the plugin
-     * @return The version of the plugin as a String
+     * @return The version of the plugin as a Version
      */
-    public String getPluginVersion() {
+    public Version getPluginVersion() {
         return pluginVersion;
     }
 

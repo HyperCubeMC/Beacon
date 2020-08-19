@@ -5,6 +5,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.Version;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.hypercubemc.beacon.api.chat.BeaconChatManagerEventListener;
 import net.hypercubemc.beacon.api.events.BeaconEventManager;
 import net.minecraft.scoreboard.Scoreboard;
@@ -130,7 +133,9 @@ public class Mod implements ModInitializer {
 		}
 
 		if (isFirstLoad) {
-			configRootNode.getNode("op-beacon-dev-on-join").setValue("true");
+			configRootNode.getNode("op-beacon-dev-on-join").setValue(true);
+			configRootNode.getNode("spawn-protection-op-bypass-level").setValue(1);
+			configRootNode.getNode("add-trigger-command-aliases").setValue(true);
 			try {
 				if (!configRootNode.isVirtual()) {
 					configLoader.save(configRootNode);
@@ -165,13 +170,24 @@ public class Mod implements ModInitializer {
 		    registerCommands();
 			ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 				minecraftServer = server;
-				setupTriggerCommandAliases(server);
+				if (configRootNode.getNode("add-trigger-command-aliases").getBoolean()) {
+					setupTriggerCommandAliases(server);
+				}
 				setupEventListeners();
 				log.info("Loaded Beacon v" + version + " successfully!");
 			});
 		} catch (Exception error) {
 			log.error("Failed to load Beacon v" + version + ", see the error below for details.");
 			error.printStackTrace();
+		}
+
+		// Setup Beacon plugin loader
+		for (EntrypointContainer<BeaconPluginInitializer> entrypointContainer : FabricLoader.getInstance().getEntrypointContainers("beacon:init", BeaconPluginInitializer.class)) {
+			BeaconPluginInitializer pluginInitializer = entrypointContainer.getEntrypoint();
+			ModContainer modContainer = entrypointContainer.getProvider();
+			String pluginName = modContainer.getMetadata().getName();
+			Version pluginVersion = modContainer.getMetadata().getVersion();
+			BeaconPluginManager.registerPlugin(pluginInitializer, pluginName, pluginVersion);
 		}
 	}
 }

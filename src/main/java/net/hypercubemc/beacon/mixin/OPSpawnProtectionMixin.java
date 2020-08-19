@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.datafixers.DataFixer;
+import net.hypercubemc.beacon.Mod;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.ResourcePackManager;
 import net.minecraft.resource.ServerResourceManager;
@@ -38,6 +39,6 @@ public abstract class OPSpawnProtectionMixin extends MinecraftServer {
             )
     )
     public boolean isSpawnProtected(DedicatedPlayerManager redirectPlayer, GameProfile redirectProfile, ServerWorld serverWorld, BlockPos pos, PlayerEntity player) {
-        return this.getPermissionLevel(player.getGameProfile()) >= 3;
+        return this.getPermissionLevel(player.getGameProfile()) >= Mod.getConfig().getNode("spawn-protection-op-bypass-level").getInt();
     }
 }

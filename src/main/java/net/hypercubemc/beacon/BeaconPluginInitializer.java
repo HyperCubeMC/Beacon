@@ -2,12 +2,9 @@ package net.hypercubemc.beacon;
 
 /**
  * Implement this to make your plugin initializer class
- * Then use BeaconPluginManager.registerPlugin(YourBeaconPluginInitializer) in your mod class or elsewhere to register it 
+ * Then specify your implemented class as your plugin initializer by adding it as an entrypoint for "beacon:init" in your fabric.mod.json
  */
 public interface BeaconPluginInitializer {
-    String getPluginName();
-    String getPluginVersion();
-
     void onEnable(BeaconPluginInstance beaconPluginInstance);
     void onDisable(BeaconPluginInstance beaconPluginInstance);
 }
