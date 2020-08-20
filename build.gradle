@@ -2,6 +2,7 @@ plugins {
 	id 'fabric-loom' version '0.4-SNAPSHOT'
 	id 'maven-publish'
 	id 'java'
+	id 'java-library'
 }
 
 sourceCompatibility = JavaVersion.VERSION_14
@@ -47,6 +48,8 @@ dependencies {
 	implementation "org.spongepowered:configurate-yaml:3.7"
 	include "org.spongepowered:configurate-core:3.7"
 	implementation "org.spongepowered:configurate-core:3.7"
+	include "org.yaml:snakeyaml:1.26"
+	implementation "org.yaml:snakeyaml:1.26"
 }
 
 processResources {
