@@ -45,6 +45,8 @@ dependencies {
 	// Sponge Configurate
 	include "org.spongepowered:configurate-yaml:3.7"
 	implementation "org.spongepowered:configurate-yaml:3.7"
+	include "org.spongepowered:configurate-core:3.7"
+	implementation "org.spongepowered:configurate-core:3.7"
 }
 
 processResources {
