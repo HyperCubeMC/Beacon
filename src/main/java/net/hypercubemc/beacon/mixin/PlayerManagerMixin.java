@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(PlayerManager.class)
 public abstract class PlayerManagerMixin {
@@ -21,12 +22,19 @@ public abstract class PlayerManagerMixin {
     @Shadow
     public abstract boolean isOperator(GameProfile profile);
 
-    @Inject(method = "onPlayerConnect", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "onPlayerConnect",
+            at = @At(value = "HEAD"),
+            locals = LocalCapture.CAPTURE_FAILHARD,
+            cancellable = true
+    )
     public void prePlayerJoin(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo callbackInfo) {
         BeaconPlayerJoinEvent.firePre(clientConnection, player, callbackInfo);
     }
 
-    @Inject(method = "onPlayerConnect", at = @At(value = "TAIL"))
+    @Inject(method = "onPlayerConnect",
+            at = @At(value = "TAIL"),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
     public void postPlayerJoin(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo callbackInfo) {
         GameProfile gameProfile = player.getGameProfile();
         // See config if you want to turn this off
@@ -36,12 +44,18 @@ public abstract class PlayerManagerMixin {
         BeaconPlayerJoinEvent.firePost(clientConnection, player);
     }
 
-    @Inject(method = "remove", at = @At(value = "HEAD"))
+    @Inject(method = "remove",
+            at = @At(value = "HEAD"),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
     public void prePlayerLeave(final ServerPlayerEntity player, CallbackInfo callbackInfo) {
         BeaconPlayerLeaveEvent.firePre(player, callbackInfo);
     }
 
-    @Inject(method = "remove", at = @At(value = "TAIL"))
+    @Inject(method = "remove",
+            at = @At(value = "TAIL"),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
     public void postPlayerLeave(final ServerPlayerEntity player, CallbackInfo callbackInfo) {
         BeaconPlayerLeaveEvent.firePost(player);
     }

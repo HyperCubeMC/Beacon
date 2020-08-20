@@ -26,6 +26,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 import com.sun.jna.*;
 import com.sun.jna.platform.win32.WinDef.*;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
+import org.yaml.snakeyaml.DumperOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -108,6 +109,7 @@ public class Mod implements ModInitializer {
 
 		YAMLConfigurationLoader configLoader = YAMLConfigurationLoader.builder()
 				.setFile(configFile)
+				.setFlowStyle(DumperOptions.FlowStyle.BLOCK)
 				.build();
 
 		boolean isFirstLoad;
@@ -174,20 +176,20 @@ public class Mod implements ModInitializer {
 					setupTriggerCommandAliases(server);
 				}
 				setupEventListeners();
-				log.info("Loaded Beacon v" + version + " successfully!");
+				log.info("Completely loaded Beacon v" + version + " successfully!");
 			});
+			log.info("Initial load of Beacon v" + version + " completed.");
+			// Setup Beacon plugin loader
+			for (EntrypointContainer<BeaconPluginInitializer> entrypointContainer : FabricLoader.getInstance().getEntrypointContainers("beacon:init", BeaconPluginInitializer.class)) {
+				BeaconPluginInitializer pluginInitializer = entrypointContainer.getEntrypoint();
+				ModContainer modContainer = entrypointContainer.getProvider();
+				String pluginName = modContainer.getMetadata().getName();
+				Version pluginVersion = modContainer.getMetadata().getVersion();
+				BeaconPluginManager.registerPlugin(pluginInitializer, pluginName, pluginVersion);
+			}
 		} catch (Exception error) {
-			log.error("Failed to load Beacon v" + version + ", see the error below for details.");
+			log.error("Failed to load Beacon v" + version + ", see the error below for details. PLUGINS WILL NOT BE LOADED.");
 			error.printStackTrace();
-		}
-
-		// Setup Beacon plugin loader
-		for (EntrypointContainer<BeaconPluginInitializer> entrypointContainer : FabricLoader.getInstance().getEntrypointContainers("beacon:init", BeaconPluginInitializer.class)) {
-			BeaconPluginInitializer pluginInitializer = entrypointContainer.getEntrypoint();
-			ModContainer modContainer = entrypointContainer.getProvider();
-			String pluginName = modContainer.getMetadata().getName();
-			Version pluginVersion = modContainer.getMetadata().getVersion();
-			BeaconPluginManager.registerPlugin(pluginInitializer, pluginName, pluginVersion);
 		}
 	}
 }
