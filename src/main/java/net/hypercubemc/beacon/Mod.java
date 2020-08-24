@@ -16,6 +16,7 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.hypercubemc.beacon.commands.BeaconCommand;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 import org.apache.logging.log4j.LogManager;
@@ -65,7 +66,17 @@ public class Mod implements ModInitializer {
 		});
 	}
 
-	public void setupTriggerCommandAliases(MinecraftServer server) {
+	public void setupTriggerCommandAliases() {
+		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+			MinecraftServer server = getMinecraftServer();
+			registerTriggerCommandAliases(server);
+		});
+		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, serverResourceManager, success) -> {
+			registerTriggerCommandAliases(server);
+		});
+	}
+
+	public void registerTriggerCommandAliases(MinecraftServer server) {
 		Scoreboard scoreboard = server.getScoreboard();
 		for (ScoreboardObjective objective: scoreboard.getObjectives()) {
 			if (objective.getCriterion().getName().equals("trigger")) {
@@ -173,7 +184,7 @@ public class Mod implements ModInitializer {
 			ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 				minecraftServer = server;
 				if (configRootNode.getNode("add-trigger-command-aliases").getBoolean()) {
-					setupTriggerCommandAliases(server);
+					setupTriggerCommandAliases();
 				}
 				setupEventListeners();
 				log.info("Completely loaded Beacon v" + version + " successfully!");
@@ -187,6 +198,11 @@ public class Mod implements ModInitializer {
 				Version pluginVersion = modContainer.getMetadata().getVersion();
 				BeaconPluginManager.registerPlugin(pluginInitializer, pluginName, pluginVersion);
 			}
+			ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+				log.info("Disabling Beacon v" + version + "...");
+				log.info("Disabling plugins has not been implemented yet!");
+				log.info("Disabled Beacon v" + version + "!");
+			});
 		} catch (Exception error) {
 			log.error("Failed to load Beacon v" + version + ", see the error below for details. PLUGINS WILL NOT BE LOADED.");
 			error.printStackTrace();
