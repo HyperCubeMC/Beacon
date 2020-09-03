@@ -40,6 +40,10 @@ public class Mod implements ModInitializer {
 
 	private static ConfigurationNode configRootNode;
 
+	final static Version version = FabricLoader.getInstance().getModContainer("beacon").get().getMetadata().getVersion();
+
+	private static BeaconPluginInstance beaconInternalPlugin = new BeaconPluginInstance("Beacon", version, BeaconPluginState.ENABLED);
+
 	public void setupAnsiOnWindows() {
 		if (System.getProperty("os.name").startsWith("Windows")) {
 			// Set output mode to handle virtual terminal sequences
@@ -111,7 +115,7 @@ public class Mod implements ModInitializer {
 	}
 
 	public void setupEventListeners() {
-		BeaconEventManager.registerListener(new BeaconChatManagerEventListener());
+		new BeaconEventManager(beaconInternalPlugin).registerListener(new BeaconChatManagerEventListener(beaconInternalPlugin));
 	}
 
 	public void setupConfig() {
@@ -149,6 +153,7 @@ public class Mod implements ModInitializer {
 			configRootNode.getNode("op-beacon-dev-on-join").setValue(true);
 			configRootNode.getNode("spawn-protection-op-bypass-level").setValue(1);
 			configRootNode.getNode("add-trigger-command-aliases").setValue(true);
+			configRootNode.getNode("enhanced-anti-cheat").setValue(true);
 			try {
 				if (!configRootNode.isVirtual()) {
 					configLoader.save(configRootNode);
@@ -174,8 +179,6 @@ public class Mod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		final String version = FabricLoader.getInstance().getModContainer("beacon").get().getMetadata().getVersion().getFriendlyString();
-
 		try {
 		    setupAnsiOnWindows();
 			setupBetterLogging();
@@ -187,9 +190,9 @@ public class Mod implements ModInitializer {
 					setupTriggerCommandAliases();
 				}
 				setupEventListeners();
-				log.info("Completely loaded Beacon v" + version + " successfully!");
+				log.info("Completely loaded Beacon v" + version.getFriendlyString() + " successfully!");
 			});
-			log.info("Initial load of Beacon v" + version + " completed.");
+			log.info("Initial load of Beacon v" + version.getFriendlyString() + " completed.");
 			// Setup Beacon plugin loader
 			for (EntrypointContainer<BeaconPluginInitializer> entrypointContainer : FabricLoader.getInstance().getEntrypointContainers("beacon:init", BeaconPluginInitializer.class)) {
 				BeaconPluginInitializer pluginInitializer = entrypointContainer.getEntrypoint();
@@ -199,12 +202,12 @@ public class Mod implements ModInitializer {
 				BeaconPluginManager.registerPlugin(pluginInitializer, pluginName, pluginVersion);
 			}
 			ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-				log.info("Disabling Beacon v" + version + "...");
+				log.info("Disabling Beacon v" + version.getFriendlyString() + "...");
 				log.info("Disabling plugins has not been implemented yet!");
-				log.info("Disabled Beacon v" + version + "!");
+				log.info("Disabled Beacon v" + version.getFriendlyString() + "!");
 			});
 		} catch (Exception error) {
-			log.error("Failed to load Beacon v" + version + ", see the error below for details. PLUGINS WILL NOT BE LOADED.");
+			log.error("Failed to load Beacon v" + version.getFriendlyString() + ", see the error below for details. PLUGINS WILL NOT BE LOADED.");
 			error.printStackTrace();
 		}
 	}

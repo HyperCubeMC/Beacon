@@ -9,11 +9,9 @@ import java.util.List;
 
 public class BeaconPlayerJoinEvent extends BeaconEvent {
     public static void firePre(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo callbackInfo) {
-        final List<Method> prePlayerJoinEventHandlerMethods = BeaconEventManager.prePlayerJoinEventHandlerMethods;
-        BeaconEventManager.fire(prePlayerJoinEventHandlerMethods, clientConnection, player, callbackInfo);
+        BeaconEventManager.fire(BeaconEventManager.prePlayerJoinEventHandlerMethodHandles, clientConnection, player, callbackInfo);
     }
     public static void firePost(ClientConnection clientConnection, ServerPlayerEntity player) {
-        final List<Method> postPlayerJoinEventHandlerMethods = BeaconEventManager.postPlayerJoinEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerJoinEventHandlerMethods, clientConnection, player);
+        BeaconEventManager.fire(BeaconEventManager.postPlayerJoinEventHandlerMethodHandles, clientConnection, player);
     }
 }

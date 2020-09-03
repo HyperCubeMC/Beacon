@@ -2,6 +2,7 @@ package net.hypercubemc.beacon;
 
 import net.fabricmc.loader.api.Version;
 import net.hypercubemc.beacon.api.chat.BeaconChatManager;
+import net.hypercubemc.beacon.api.events.BeaconEventManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,6 +58,7 @@ public class BeaconPluginInstance {
     
     /**
      * Gets the BeaconPluginLogger for the plugin
+     * <br>
      * This is what you should be using to log
      * @return A BeaconPluginLogger
      */
@@ -65,11 +67,24 @@ public class BeaconPluginInstance {
     }
 
     /**
-     * Gets the ChatManager class
+     * Gets an instance of BeaconChatManager
+     * <br>
      * It has useful methods to manage the chat
-     * @return ChatManager
+     * @return BeaconChatManager
      */
     public BeaconChatManager getChatManager() {
-        return BeaconChatManager.getInstance();
+        return new BeaconChatManager(this);
+    }
+
+    /**
+     * Gets an instance of BeaconEventManager
+     * <br>
+     * This class serves as a manager for the event system.
+     * <br>
+     * Use {@link net.hypercubemc.beacon.api.events.BeaconEventManager#registerListener BeaconEventManager.registerPlugin(YourBeaconEventListenerClass)} to register your event listener class and your event handlers
+     * @return BeaconEventManager
+     */
+    public BeaconEventManager getEventManager() {
+        return new BeaconEventManager(this);
     }
 }

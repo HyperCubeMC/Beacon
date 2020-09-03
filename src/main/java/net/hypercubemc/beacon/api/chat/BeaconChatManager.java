@@ -1,32 +1,16 @@
 package net.hypercubemc.beacon.api.chat;
 
+import net.hypercubemc.beacon.BeaconPluginInstance;
+
 /**
  * Contains useful methods for managing the chat
  */
 public class BeaconChatManager {
-    private static volatile BeaconChatManager beaconChatManager;
-
+    BeaconPluginInstance plugin;
+    public BeaconChatManager(BeaconPluginInstance plugin) {
+        this.plugin = plugin;
+    }
     private BeaconChatState chatState = BeaconChatState.UNMUTED;
-
-    private BeaconChatManager() {
-        if (beaconChatManager != null){
-            throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
-        }
-    }
-
-    /**
-     * Used to get the sole instance of the BeaconChatManager
-     * @return ChatManager
-     */
-    public static BeaconChatManager getInstance() {
-        if (beaconChatManager == null) {
-            synchronized (BeaconChatManager.class) {
-                if (beaconChatManager == null) beaconChatManager = new BeaconChatManager();
-            }
-        }
-
-        return beaconChatManager;
-    }
 
     /**
      * Used to get the current chat state, which is a BeaconChatState that can be UNMUTED, MUTED, or MUTED_WITH_OP_BYPASS

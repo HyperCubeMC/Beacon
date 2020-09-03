@@ -1,5 +1,6 @@
 package net.hypercubemc.beacon.api.chat;
 
+import net.hypercubemc.beacon.BeaconPluginInstance;
 import net.hypercubemc.beacon.Mod;
 import net.hypercubemc.beacon.api.events.BeaconEventFireStage;
 import net.hypercubemc.beacon.api.events.BeaconEventHandler;
@@ -10,9 +11,14 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 public class BeaconChatManagerEventListener implements BeaconEventListener {
+    static BeaconPluginInstance beaconInternalPlugin;
+    public BeaconChatManagerEventListener(BeaconPluginInstance beaconInternalPluginInstance) {
+        beaconInternalPlugin = beaconInternalPluginInstance;
+    }
+
     @BeaconEventHandler(value = BeaconPlayerChatEvent.class, fireStage = BeaconEventFireStage.PRE)
     public static void onChatMessage(ChatMessageC2SPacket packet, ServerPlayerEntity player, CallbackInfo callbackInfo) {
-        BeaconChatState chatState = BeaconChatManager.getInstance().getChatState();
+        BeaconChatState chatState = new BeaconChatManager(beaconInternalPlugin).getChatState();
         if (chatState == BeaconChatState.MUTED) {
             callbackInfo.cancel();
         }

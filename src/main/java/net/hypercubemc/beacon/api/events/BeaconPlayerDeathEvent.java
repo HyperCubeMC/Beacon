@@ -9,11 +9,9 @@ import java.util.List;
 
 public class BeaconPlayerDeathEvent extends BeaconEvent {
     public static void firePre(PlayerEntity player, DamageSource source, CallbackInfo callbackInfo) {
-        final List<Method> prePlayerDeathEventHandlerMethods = BeaconEventManager.prePlayerDeathEventHandlerMethods;
-        BeaconEventManager.fire(prePlayerDeathEventHandlerMethods, source, callbackInfo);
+        BeaconEventManager.fire(BeaconEventManager.prePlayerDeathEventHandlerMethodHandles, source, callbackInfo);
     }
     public static void firePost(PlayerEntity player, DamageSource source) {
-        final List<Method> postPlayerDeathEventHandlerMethods = BeaconEventManager.postPlayerDeathEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerDeathEventHandlerMethods, source);
+        BeaconEventManager.fire(BeaconEventManager.postPlayerDeathEventHandlerMethodHandles, source);
     }
 }

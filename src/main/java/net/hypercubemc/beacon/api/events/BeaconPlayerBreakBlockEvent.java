@@ -13,11 +13,9 @@ import java.util.List;
 
 public class BeaconPlayerBreakBlockEvent extends BeaconEvent {
     public static void firePre(BlockPos pos, CallbackInfoReturnable<Boolean> cir, BlockState blockState, BlockEntity entity, Block block, ServerPlayerEntity player, ServerWorld world) {
-        final List<Method> prePlayerBreakBlockEventHandlerMethods = BeaconEventManager.prePlayerBreakBlockEventHandlerMethods;
-        BeaconEventManager.fire(prePlayerBreakBlockEventHandlerMethods, pos, cir, blockState, entity, block, player, world);
+        BeaconEventManager.fire(BeaconEventManager.prePlayerBreakBlockEventHandlerMethodHandles, pos, cir, blockState, entity, block, player, world);
     }
     public static void firePost(BlockPos pos, BlockState blockState, BlockEntity entity, Block block, ServerPlayerEntity player, ServerWorld world) {
-        final List<Method> postPlayerBreakBlockEventHandlerMethods = BeaconEventManager.postPlayerBreakBlockEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerBreakBlockEventHandlerMethods, pos, blockState, entity, block, player, world);
+        BeaconEventManager.fire(BeaconEventManager.postPlayerBreakBlockEventHandlerMethodHandles, pos, blockState, entity, block, player, world);
     }
 }

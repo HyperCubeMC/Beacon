@@ -9,11 +9,9 @@ import java.util.List;
 
 public class BeaconPlayerPlaceBlockEvent extends BeaconEvent {
     public static void firePre(PlayerInteractBlockC2SPacket packet, ServerPlayerEntity player, CallbackInfo callbackInfo) {
-        final List<Method> prePlayerPlaceBlockEventHandlerMethods = BeaconEventManager.prePlayerPlaceBlockEventHandlerMethods;
-        BeaconEventManager.fire(prePlayerPlaceBlockEventHandlerMethods, packet, player, callbackInfo);
+        BeaconEventManager.fire(BeaconEventManager.prePlayerPlaceBlockEventHandlerMethodHandles, packet, player, callbackInfo);
     }
     public static void firePost(PlayerInteractBlockC2SPacket packet, ServerPlayerEntity player) {
-        final List<Method> postPlayerPlaceBlockEventHandlerMethods = BeaconEventManager.postPlayerPlaceBlockEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerPlaceBlockEventHandlerMethods, packet, player);
+        BeaconEventManager.fire(BeaconEventManager.postPlayerPlaceBlockEventHandlerMethodHandles, packet, player);
     }
 }

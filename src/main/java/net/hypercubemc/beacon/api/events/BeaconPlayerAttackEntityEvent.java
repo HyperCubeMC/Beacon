@@ -8,12 +8,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class BeaconPlayerAttackEntityEvent extends BeaconEvent {
-    public static void firePre(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo, ServerPlayerEntity player) {
-        final List<Method> prePlayerBreakBlockEventHandlerMethods = BeaconEventManager.prePlayerAttackEntityEventHandlerMethods;
-        BeaconEventManager.fire(prePlayerBreakBlockEventHandlerMethods, packet, callbackInfo, player);
+    public static void firePre(PlayerInteractEntityC2SPacket packet, ServerPlayerEntity player, CallbackInfo callbackInfo) {
+        BeaconEventManager.fire(BeaconEventManager.prePlayerAttackEntityEventHandlerMethodHandles, packet, player, callbackInfo);
     }
     public static void firePost(PlayerInteractEntityC2SPacket packet, ServerPlayerEntity player) {
-        final List<Method> postPlayerBreakBlockEventHandlerMethods = BeaconEventManager.postPlayerAttackEntityEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerBreakBlockEventHandlerMethods, packet, player);
+        BeaconEventManager.fire(BeaconEventManager.postPlayerAttackEntityEventHandlerMethodHandles, packet, player);
     }
 }

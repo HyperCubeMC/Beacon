@@ -9,11 +9,9 @@ import java.util.List;
 
 public class BeaconPlayerChatEvent extends BeaconEvent {
     public static void firePre(ChatMessageC2SPacket packet, ServerPlayerEntity player, CallbackInfo callbackInfo) {
-        final List<Method> prePlayerChatEventHandlerMethods = BeaconEventManager.prePlayerChatEventHandlerMethods;
-        BeaconEventManager.fire(prePlayerChatEventHandlerMethods, packet, player, callbackInfo);
+        BeaconEventManager.fire(BeaconEventManager.prePlayerChatEventHandlerMethodHandles, packet, player, callbackInfo);
     }
     public static void firePost(ChatMessageC2SPacket packet, ServerPlayerEntity player) {
-        final List<Method> postPlayerChatEventHandlerMethods = BeaconEventManager.postPlayerChatEventHandlerMethods;
-        BeaconEventManager.fire(postPlayerChatEventHandlerMethods, packet, player);
+        BeaconEventManager.fire(BeaconEventManager.postPlayerChatEventHandlerMethodHandles, packet, player);
     }
 }

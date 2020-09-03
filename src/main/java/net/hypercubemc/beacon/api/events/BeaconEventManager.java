@@ -1,12 +1,15 @@
 package net.hypercubemc.beacon.api.events;
 
+import net.hypercubemc.beacon.BeaconPluginInstance;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is the general manager for Beacon events
@@ -14,23 +17,31 @@ import java.util.List;
 public class BeaconEventManager {
     private static final Logger log = LogManager.getLogger("Beacon");
 
+    final BeaconPluginInstance plugin;
+
     static List<Method> allEventHandlerMethods = new ArrayList<>();
-    static List<Method> prePlayerJoinEventHandlerMethods = new ArrayList<>();
-    static List<Method> postPlayerJoinEventHandlerMethods = new ArrayList<>();
-    static List<Method> prePlayerLeaveEventHandlerMethods = new ArrayList<>();
-    static List<Method> postPlayerLeaveEventHandlerMethods = new ArrayList<>();
-    static List<Method> prePlayerDeathEventHandlerMethods = new ArrayList<>();
-    static List<Method> postPlayerDeathEventHandlerMethods = new ArrayList<>();
-    static List<Method> prePlayerBreakBlockEventHandlerMethods = new ArrayList<>();
-    static List<Method> postPlayerBreakBlockEventHandlerMethods = new ArrayList<>();
-    static List<Method> prePlayerPlaceBlockEventHandlerMethods = new ArrayList<>();
-    static List<Method> postPlayerPlaceBlockEventHandlerMethods = new ArrayList<>();
-    static List<Method> prePlayerInteractEntityEventHandlerMethods = new ArrayList<>();
-    static List<Method> postPlayerInteractEntityEventHandlerMethods = new ArrayList<>();
-    static List<Method> prePlayerAttackEntityEventHandlerMethods = new ArrayList<>();
-    static List<Method> postPlayerAttackEntityEventHandlerMethods = new ArrayList<>();
-    static List<Method> prePlayerChatEventHandlerMethods = new ArrayList<>();
-    static List<Method> postPlayerChatEventHandlerMethods = new ArrayList<>();
+    static List<MethodHandle> prePlayerJoinEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerJoinEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> prePlayerLeaveEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerLeaveEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> prePlayerDeathEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerDeathEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> prePlayerBreakBlockEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerBreakBlockEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> prePlayerPlaceBlockEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerPlaceBlockEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> prePlayerInteractEntityEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerInteractEntityEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> prePlayerAttackEntityEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerAttackEntityEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> prePlayerChatEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerChatEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> prePlayerMoveEventHandlerMethodHandles = new ArrayList<>();
+    static List<MethodHandle> postPlayerMoveEventHandlerMethodHandles = new ArrayList<>();
+
+    public BeaconEventManager(BeaconPluginInstance plugin) {
+        this.plugin = plugin;
+    }
 
     /**
      * Registers a BeaconEventListener
@@ -40,57 +51,66 @@ public class BeaconEventManager {
      * </p>
      * @param listener - Your event listener class implementing BeaconEventListener
     */
-    public static void registerListener(BeaconEventListener listener) {
-        Method[] allMethods = listener.getClass().getMethods();
-        for (Method method : allMethods) {
-            if (method.isAnnotationPresent(BeaconEventHandler.class)) {
-                allEventHandlerMethods.add(method);
-            }
-        }
-        for (Method eventHandler : allEventHandlerMethods) {
-            BeaconEventHandler eventHandlerAnnotation = eventHandler.getAnnotation(BeaconEventHandler.class);
-            if (eventHandlerAnnotation.fireStage() == BeaconEventFireStage.PRE) {
-                if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
-                    prePlayerJoinEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
-                    prePlayerLeaveEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
-                    prePlayerDeathEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerBreakBlockEvent.class) {
-                    prePlayerBreakBlockEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerPlaceBlockEvent.class) {
-                    prePlayerPlaceBlockEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerInteractEntityEvent.class) {
-                    prePlayerInteractEntityEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerChatEvent.class) {
-                    prePlayerChatEventHandlerMethods.add(eventHandler);
-                }
-            } else if (eventHandlerAnnotation.fireStage() == BeaconEventFireStage.POST) {
-                if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
-                    postPlayerJoinEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
-                    postPlayerLeaveEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
-                    postPlayerDeathEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerBreakBlockEvent.class) {
-                    postPlayerBreakBlockEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerPlaceBlockEvent.class) {
-                    postPlayerPlaceBlockEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerInteractEntityEvent.class) {
-                    postPlayerInteractEntityEventHandlerMethods.add(eventHandler);
-                } else if (eventHandlerAnnotation.value() == BeaconPlayerChatEvent.class) {
-                    postPlayerChatEventHandlerMethods.add(eventHandler);
+    public void registerListener(BeaconEventListener listener) {
+        try {
+            Method[] allMethods = listener.getClass().getMethods();
+            for (Method method : allMethods) {
+                if (method.isAnnotationPresent(BeaconEventHandler.class)) {
+                    allEventHandlerMethods.add(method);
                 }
             }
+            for (Method eventHandler : allEventHandlerMethods) {
+                BeaconEventHandler eventHandlerAnnotation = eventHandler.getAnnotation(BeaconEventHandler.class);
+                if (eventHandlerAnnotation.fireStage() == BeaconEventFireStage.PRE) {
+                    if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
+                        prePlayerJoinEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
+                        prePlayerLeaveEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
+                        prePlayerDeathEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerBreakBlockEvent.class) {
+                        prePlayerBreakBlockEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerPlaceBlockEvent.class) {
+                        prePlayerPlaceBlockEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerInteractEntityEvent.class) {
+                        prePlayerInteractEntityEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerChatEvent.class) {
+                        prePlayerChatEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerMoveEvent.class) {
+                        prePlayerMoveEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    }
+                } else if (eventHandlerAnnotation.fireStage() == BeaconEventFireStage.POST) {
+                    if (eventHandlerAnnotation.value() == BeaconPlayerJoinEvent.class) {
+                        postPlayerJoinEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerLeaveEvent.class) {
+                        postPlayerLeaveEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerDeathEvent.class) {
+                        postPlayerDeathEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerBreakBlockEvent.class) {
+                        postPlayerBreakBlockEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerPlaceBlockEvent.class) {
+                        postPlayerPlaceBlockEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerInteractEntityEvent.class) {
+                        postPlayerInteractEntityEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerChatEvent.class) {
+                        postPlayerChatEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    } else if (eventHandlerAnnotation.value() == BeaconPlayerMoveEvent.class) {
+                        postPlayerMoveEventHandlerMethodHandles.add(MethodHandles.lookup().unreflect(eventHandler));
+                    }
+                }
+            }
+        } catch (IllegalAccessException error) {
+            log.error("An error occurred while attempting to register events for plugin " + plugin + ", see the error below for details.");
+            error.printStackTrace();
         }
     }
 
-    static void fire(final List<Method> methods, final Object... arguments) {
+    static void fire(final List<MethodHandle> methodHandles, final Object... arguments) {
         try {
-            for (final Method method : methods) {
-                method.invoke(null, arguments);
+            for (final MethodHandle methodHandle : methodHandles) {
+                methodHandle.invokeWithArguments(arguments);
             }
-        } catch (InvocationTargetException | IllegalAccessException error) {
+        } catch (Throwable error) {
             log.error("An error occurred while attempting to fire the event " + StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getSimpleName() + ", see the error below for details.");
             error.printStackTrace();
         }

@@ -1,17 +1,18 @@
 package net.hypercubemc.beacon.mixin;
 
-import net.hypercubemc.beacon.api.events.BeaconPlayerAttackEntityEvent;
-import net.hypercubemc.beacon.api.events.BeaconPlayerChatEvent;
-import net.hypercubemc.beacon.api.events.BeaconPlayerInteractEntityEvent;
-import net.hypercubemc.beacon.api.events.BeaconPlayerPlaceBlockEvent;
+import net.hypercubemc.beacon.Mod;
+import net.hypercubemc.beacon.api.events.*;
 import net.minecraft.network.MessageType;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import org.spongepowered.asm.mixin.injection.modify.LocalVariableDiscriminator;
 
 import java.util.UUID;
 
@@ -53,7 +55,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
             cancellable = true
     )
     public void prePlayerAttackEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
-        BeaconPlayerAttackEntityEvent.firePre(packet, callbackInfo, player);
+        BeaconPlayerAttackEntityEvent.firePre(packet, player, callbackInfo);
     }
 
     @Inject(method = "onPlayerInteractEntity",
@@ -101,6 +103,43 @@ public abstract class ServerPlayNetworkHandlerMixin {
     public void postChatMessage(ChatMessageC2SPacket packet, CallbackInfo callbackInfo) {
         if (!callbackInfo.isCancelled()) {
             BeaconPlayerChatEvent.firePost(packet, player);
+        }
+    }
+
+    @Inject(method = "onPlayerMove",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;getBoundingBox()Lnet/minecraft/util/math/Box;"),
+            locals = LocalCapture.CAPTURE_FAILHARD,
+            cancellable = true
+    )
+    public void prePlayerMove(PlayerMoveC2SPacket packet, CallbackInfo callbackInfo) {
+        BeaconPlayerMoveEvent.firePre(packet, player, callbackInfo);
+    }
+
+    @Inject(method = "onPlayerMove",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V", shift = At.Shift.AFTER),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    public void postPlayerMove(PlayerMoveC2SPacket packet, CallbackInfo callbackInfo) {
+        BeaconPlayerMoveEvent.firePost(packet, player);
+    }
+
+    @Inject(method = "onPlayerMove",
+            at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V", shift = At.Shift.AFTER),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    public void onPlayerFailSpeed(PlayerMoveC2SPacket packet, CallbackInfo ci) {
+        if (Mod.getConfig().getNode("enhanced-anti-cheat").getBoolean()) {
+            Mod.getMinecraftServer().getPlayerManager().broadcastChatMessage(new LiteralText("[WARN] Player " + player.getName().asString() + " is faster than normal!"), MessageType.SYSTEM, Util.NIL_UUID);
+        }
+    }
+
+    @Inject(method = "onPlayerMove",
+            at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V", shift = At.Shift.AFTER),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    public void onPlayerMoveWrongly(PlayerMoveC2SPacket packet, CallbackInfo ci) {
+        if (Mod.getConfig().getNode("enhanced-anti-cheat").getBoolean()) {
+            Mod.getMinecraftServer().getPlayerManager().broadcastChatMessage(new LiteralText("[WARN] Player " + player.getName().asString() + " is moving wrongly!"), MessageType.SYSTEM, Util.NIL_UUID);
         }
     }
 }
