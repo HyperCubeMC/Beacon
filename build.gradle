@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id 'maven-publish'
 	id 'java'
 	id 'java-library'
@@ -30,10 +30,10 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// JNA
-	include "net.java.dev.jna:jna:5.5.0"
-	implementation "net.java.dev.jna:jna:5.5.0"
-	include "net.java.dev.jna:jna-platform:5.5.0"
-	implementation "net.java.dev.jna:jna-platform:5.5.0"
+	include "net.java.dev.jna:jna:5.6.0"
+	implementation "net.java.dev.jna:jna:5.6.0"
+	include "net.java.dev.jna:jna-platform:5.6.0"
+	implementation "net.java.dev.jna:jna-platform:5.6.0"
 
 	// TerminalConsoleAppender
 	include "net.minecrell:terminalconsoleappender:1.2.0"
