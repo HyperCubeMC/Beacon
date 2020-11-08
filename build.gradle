@@ -44,10 +44,10 @@ dependencies {
 	implementation "org.jline:jline-terminal-jna:3.12.1"
 
 	// Sponge Configurate
-	include "org.spongepowered:configurate-yaml:3.7"
-	implementation "org.spongepowered:configurate-yaml:3.7"
-	include "org.spongepowered:configurate-core:3.7"
-	implementation "org.spongepowered:configurate-core:3.7"
+	include "org.spongepowered:configurate-yaml:3.7.1"
+	implementation "org.spongepowered:configurate-yaml:3.7.1"
+	include "org.spongepowered:configurate-core:3.7.1"
+	implementation "org.spongepowered:configurate-core:3.7.1"
 	include "org.yaml:snakeyaml:1.26"
 	implementation "org.yaml:snakeyaml:1.26"
 }

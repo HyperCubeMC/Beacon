@@ -16,7 +16,6 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.hypercubemc.beacon.commands.BeaconCommand;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 import org.apache.logging.log4j.LogManager;
