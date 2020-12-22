@@ -69,16 +69,6 @@ public class Mod implements ModInitializer {
 		});
 	}
 
-	public void setupTriggerCommandAliases() {
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-			MinecraftServer server = getMinecraftServer();
-			registerTriggerCommandAliases(server);
-		});
-		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, serverResourceManager, success) -> {
-			registerTriggerCommandAliases(server);
-		});
-	}
-
 	public void registerTriggerCommandAliases(MinecraftServer server) {
 		Scoreboard scoreboard = server.getScoreboard();
 		for (ScoreboardObjective objective: scoreboard.getObjectives()) {
@@ -114,6 +104,12 @@ public class Mod implements ModInitializer {
 	}
 
 	public void setupEventListeners() {
+		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+			registerTriggerCommandAliases(minecraftServer);
+		});
+		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, serverResourceManager, success) -> {
+			registerTriggerCommandAliases(server);
+		});
 		new BeaconEventManager(beaconInternalPlugin).registerListener(new BeaconChatManagerEventListener(beaconInternalPlugin));
 	}
 
@@ -152,7 +148,7 @@ public class Mod implements ModInitializer {
 			configRootNode.getNode("op-beacon-dev-on-join").setValue(true);
 			configRootNode.getNode("spawn-protection-op-bypass-level").setValue(1);
 			configRootNode.getNode("add-trigger-command-aliases").setValue(true);
-			configRootNode.getNode("enhanced-anti-cheat").setValue(true);
+			configRootNode.getNode("verbose-anti-cheat").setValue(false);
 			try {
 				if (!configRootNode.isVirtual()) {
 					configLoader.save(configRootNode);
@@ -186,7 +182,7 @@ public class Mod implements ModInitializer {
 			ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 				minecraftServer = server;
 				if (configRootNode.getNode("add-trigger-command-aliases").getBoolean()) {
-					setupTriggerCommandAliases();
+					registerTriggerCommandAliases(server);
 				}
 				setupEventListeners();
 				log.info("Completely loaded Beacon v" + version.getFriendlyString() + " successfully!");
