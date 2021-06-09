@@ -2,17 +2,19 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.hypercubemc.beacon.mixin",
-  "compatibilityLevel": "JAVA_14",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "ChannelInitializerMixin"
   ],
   "server": [
-    "PlayerEntityMixin",
     "OPFillCommandSpawnProtectionMixin",
     "OPSetBlockCommandSpawnProtectionMixin",
     "OPSpawnProtectionMixin",
+    "PlayerEntityMixin",
     "PlayerManagerMixin",
     "ServerPlayerInteractionManagerMixin",
-    "ServerPlayNetworkHandlerMixin"
+    "ServerPlayNetworkHandlerMixin",
+    "ServerPlayNetworkHandlerMixin2"
   ],
   "injectors": {
     "defaultRequire": 1

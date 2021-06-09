@@ -1,17 +1,16 @@
 package net.hypercubemc.beacon.api.events;
 
-import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 public class BeaconPlayerInteractEntityEvent extends BeaconEvent {
-    public static void firePre(PlayerInteractEntityC2SPacket packet, ServerPlayerEntity player, CallbackInfo callbackInfo) {
-        BeaconEventManager.fire(BeaconEventManager.prePlayerInteractEntityEventHandlerMethodHandles, packet, player, callbackInfo);
+    public static void firePre(Hand hand, Vec3d pos, Entity entity, ServerPlayerEntity player, CallbackInfo callbackInfo) {
+        BeaconEventManager.fire(BeaconEventManager.prePlayerInteractEntityEventHandlerMethodHandles, hand, pos, entity, player, callbackInfo);
     }
-    public static void firePost(PlayerInteractEntityC2SPacket packet, ServerPlayerEntity player) {
-        BeaconEventManager.fire(BeaconEventManager.postPlayerInteractEntityEventHandlerMethodHandles, packet, player);
+    public static void firePost(Hand hand, Vec3d pos, Entity entity, ServerPlayerEntity player) {
+        BeaconEventManager.fire(BeaconEventManager.postPlayerInteractEntityEventHandlerMethodHandles, hand, pos, entity, player);
     }
 }

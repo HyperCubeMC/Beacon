@@ -5,66 +5,41 @@ import net.hypercubemc.beacon.api.events.*;
 import net.minecraft.network.MessageType;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
-import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import org.spongepowered.asm.mixin.injection.modify.LocalVariableDiscriminator;
-
-import java.util.UUID;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public abstract class ServerPlayNetworkHandlerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
-    @Inject(method = "onPlayerInteractEntity",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;interactAt(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"),
-            locals = LocalCapture.CAPTURE_FAILHARD,
-            cancellable = true
-    )
-    public void prePlayerInteractEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
-        BeaconPlayerInteractEntityEvent.firePre(packet, player, callbackInfo);
-    }
+    @Shadow
+    private long lastKeepAliveTime;
 
-    @Inject(method = "onPlayerInteractEntity",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;interactAt(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"),
-            locals = LocalCapture.CAPTURE_FAILHARD
-    )
-    public void postPlayerInteractEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
-        if (!callbackInfo.isCancelled()) {
-            BeaconPlayerInteractEntityEvent.firePost(packet, player);
-        }
-    }
+    @Redirect(method = "tick", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;disconnect" +
+                    "(Lnet/minecraft/text/Text;)V",
+            ordinal = 2
+    ))
+    private void disconnect(ServerPlayNetworkHandler handler, Text reason) {
+        final long keepAliveTimeoutMs = Mod.getConfig().node("keepalive-timeout").getInt() * 1000L;
 
-    @Inject(method = "onPlayerInteractEntity",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"),
-            locals = LocalCapture.CAPTURE_FAILHARD,
-            cancellable = true
-    )
-    public void prePlayerAttackEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
-        BeaconPlayerAttackEntityEvent.firePre(packet, player, callbackInfo);
-    }
-
-    @Inject(method = "onPlayerInteractEntity",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"),
-            locals = LocalCapture.CAPTURE_FAILHARD
-    )
-    public void postPlayerAttackEntity(PlayerInteractEntityC2SPacket packet, CallbackInfo callbackInfo) {
-        if (!callbackInfo.isCancelled()) {
-            BeaconPlayerAttackEntityEvent.firePost(packet, player);
+        if (Util.getMeasuringTimeMs() - lastKeepAliveTime >= keepAliveTimeoutMs) {
+            handler.disconnect(reason);
         }
     }
 
@@ -124,21 +99,21 @@ public abstract class ServerPlayNetworkHandlerMixin {
     }
 
     @Inject(method = "onPlayerMove",
-            at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V", shift = At.Shift.AFTER),
+            at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V", shift = At.Shift.AFTER, remap = false),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     public void onPlayerFailSpeed(PlayerMoveC2SPacket packet, CallbackInfo ci) {
-        if (Mod.getConfig().getNode("enhanced-anti-cheat").getBoolean()) {
+        if (Mod.getConfig().node("enhanced-anti-cheat").getBoolean()) {
             Mod.getMinecraftServer().getPlayerManager().broadcastChatMessage(new LiteralText("[WARN] Player " + player.getName().asString() + " is faster than normal!"), MessageType.SYSTEM, Util.NIL_UUID);
         }
     }
 
     @Inject(method = "onPlayerMove",
-            at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V", shift = At.Shift.AFTER),
+            at = @At(value = "INVOKE", target = "Lorg/apache/logging/log4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V", shift = At.Shift.AFTER, remap = false),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     public void onPlayerMoveWrongly(PlayerMoveC2SPacket packet, CallbackInfo ci) {
-        if (Mod.getConfig().getNode("enhanced-anti-cheat").getBoolean()) {
+        if (Mod.getConfig().node("enhanced-anti-cheat").getBoolean()) {
             Mod.getMinecraftServer().getPlayerManager().broadcastChatMessage(new LiteralText("[WARN] Player " + player.getName().asString() + " is moving wrongly!"), MessageType.SYSTEM, Util.NIL_UUID);
         }
     }

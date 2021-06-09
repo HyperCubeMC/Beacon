@@ -39,6 +39,6 @@ public abstract class OPSpawnProtectionMixin extends MinecraftServer {
             )
     )
     public boolean isSpawnProtected(DedicatedPlayerManager redirectPlayer, GameProfile redirectProfile, ServerWorld serverWorld, BlockPos pos, PlayerEntity player) {
-        return this.getPermissionLevel(player.getGameProfile()) >= Mod.getConfig().getNode("spawn-protection-op-bypass-level").getInt();
+        return this.getPermissionLevel(player.getGameProfile()) >= Mod.getConfig().node("spawn-protection-op-bypass-level").getInt();
     }
 }

@@ -42,9 +42,9 @@
 
 			<!--	Keep 5 files max	-->
 			<DefaultRolloverStrategy max="5" fileIndex="min"/>
-			
+
 			<Policies>
-				<SizeBasedTriggeringPolicy size="500MB"/>
+				<SizeBasedTriggeringPolicy size="200MB"/>
 				<OnStartupTriggeringPolicy />
 			</Policies>
 
